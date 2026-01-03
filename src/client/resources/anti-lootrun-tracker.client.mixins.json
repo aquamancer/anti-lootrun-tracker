@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.aquamancer.mixin.client",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "GameRendererMixin",
+    "TexturedRenderLayersMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "ChestBlockEntityRendererMixin"
+  ]
+}
