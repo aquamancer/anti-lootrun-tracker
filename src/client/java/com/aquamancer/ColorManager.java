@@ -45,7 +45,7 @@ public class ColorManager {
     }
 
     private static SpriteIdentifier createChestTextureId(String variant) {
-        return new SpriteIdentifier(CHEST_ATLAS_TEXTURE, new Identifier(AntiLootrunTracker.MOD_ID, "entity/chest/" + variant));
+        return new SpriteIdentifier(CHEST_ATLAS_TEXTURE, new Identifier(AntiLootrunTrackerClient.MOD_ID, "entity/chest/" + variant));
     }
 
     /**

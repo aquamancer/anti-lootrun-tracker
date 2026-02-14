@@ -15,15 +15,14 @@
 	"icon": "assets/anti-lootrun-tracker/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-          "com.aquamancer.AntiLootrunTracker"
-		],
 		"client": [
 			"com.aquamancer.AntiLootrunTrackerClient"
+		],
+		"modmenu": [
+			"com.aquamancer.config.ModMenuApiImpl"
 		]
 	},
 	"mixins": [
-		"anti-lootrun-tracker.mixins.json",
 		{
 			"config": "anti-lootrun-tracker.client.mixins.json",
 			"environment": "client"

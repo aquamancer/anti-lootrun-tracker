@@ -25,10 +25,12 @@ import java.util.List;
 @Mixin(GameRenderer.class)
 public class GameRendererMixin {
 	/**
-	 * Enumerates all mobs nearby the Chest being hovered by the player's crosshair.
+	 * Enumerates all mobs nearby the Chest being hovered by the player's crosshair to the action bar.
 	 */
 	@Inject(at = @At("HEAD"), method = "renderWorld")
 	private void onRenderWorld(float tickDelta, long limitTime, MatrixStack matrixStack, CallbackInfo ci) {
+		if (!AntiLootrunTrackerClient.shouldRenderMobList()) return;
+
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client == null || client.world == null || client.player == null || client.cameraEntity == null) {
 			return;

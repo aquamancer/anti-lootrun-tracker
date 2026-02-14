@@ -1,5 +1,6 @@
 package com.aquamancer.mixin.client;
 
+import com.aquamancer.AntiLootrunTrackerClient;
 import com.aquamancer.ColorManager;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -28,6 +29,10 @@ public class ChestBlockEntityRendererMixin {
      */
     @Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V")
     public void render(BlockEntity chest, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
+        if (!AntiLootrunTrackerClient.shouldRenderMobCountOnChest()) {
+            return;
+        }
+
         MinecraftClient client = MinecraftClient.getInstance();
         World world = chest.getWorld();
         if (world == null || client == null) {
