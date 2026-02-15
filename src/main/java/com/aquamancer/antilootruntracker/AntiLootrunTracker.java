@@ -10,6 +10,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 
@@ -69,7 +70,11 @@ public class AntiLootrunTracker implements ClientModInitializer {
 			return client.world.getEntitiesByClass(
 					MobEntity.class,
 					new Box(pos).expand(AntiLootrunTracker.MOB_SEARCH_RADIUS),
-					mob -> mob.isAlive() && config.getIgnoredMobs().stream().noneMatch(ignored -> ignored.equals(EntityType.getId(mob.getType()).getPath()))
+					mob -> {
+						return mob.isAlive()
+								&& config.getIgnoredBaseMobs().stream().noneMatch(ignored -> ignored.equalsIgnoreCase(EntityType.getId(mob.getType()).toString()))
+								&& config.getIgnoredMobNames().stream().noneMatch(ignored -> ignored.equalsIgnoreCase((mob.getCustomName() != null ? mob.getCustomName() : mob.getDisplayName()).getString()));
+					}
 			);
 		}).stream().filter(LivingEntity::isAlive);
 	}

@@ -38,9 +38,35 @@ public class ModConfig implements ConfigData {
     ChestNumberOptions chestNumberOptions = new ChestNumberOptions();
 
     @Tooltip
-    private List<String> ignoredMobs = new ArrayList<>() {{
-        add("allay");
-        add("villager");
+    private List<String> ignoredBaseMobs = new ArrayList<>() {{
+        add("minecraft:villager");
+    }};
+
+    @Tooltip
+    private List<String> ignoredMobNames = new ArrayList<>() {{
+        // alchemist
+        add("AlchemicalGrenade");  // alchemical artillery
+        add("Unstable Amalgam");  // unstable amalgam
+        // alchemist/harbinger
+        add("Alchemical Aberration");  // esoteric enhancements
+
+        // scout hunting companion
+        add("Fox Companion");  // on land
+        add("Axolotl Companion");  // in water
+        add("Strider Companion");  // in lava
+        add("Eagle Companion");  // skill enhancement: not in water
+        add("Dolphin Companion");  // skill enhancement: in water
+        // skin
+        add("Twisted Companion");  // replaces Fox Companion
+
+        // warlock/tenebrist
+        add("Restless Soul");
+        // skin is called fae spirits but the entity is still named Restless Soul(?)
+
+        // cleric/seraph
+        add("Keeper Virtue");
+        // skin
+        add("Vigilant Mothdragon");
     }};
 
 
@@ -142,7 +168,11 @@ public class ModConfig implements ConfigData {
         return recolor;
     }
 
-    public List<String> getIgnoredMobs() {
-        return ignoredMobs;
+    public List<String> getIgnoredBaseMobs() {
+        return ignoredBaseMobs;
+    }
+
+    public List<String> getIgnoredMobNames() {
+        return ignoredMobNames;
     }
 }
