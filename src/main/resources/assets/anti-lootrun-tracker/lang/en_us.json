@@ -6,7 +6,7 @@
   "text.autoconfig.anti-lootrun-tracker.option.shardsEnabledIn": "Shards Enabled in",
   "text.autoconfig.anti-lootrun-tracker.option.shardsEnabledIn.@Tooltip": "Regex of shard names to match for this mod to be active",
   "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval": "Entity Scan Interval",
-  "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval.@Tooltip": "How often to re-scan mobs near each chest (every n ticks, 1s = 20 ticks).\nValues less than 2 scan on every tick.\nLower values increase responsiveness of mobs entering/leaving the range of a chest\nat the cost of very minor game performance.\nMobs around newly-rendered chests are immediately scanned regardless of this value.",
+  "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval.@Tooltip": "How often to re-scan mobs near each chest (every n ticks, 1s = 20 ticks).\nValues less than 2 scan on every tick.\nLower values increase responsiveness of mobs entering/leaving the range of a chest\nat a very minor cost of game performance.\nMobs around newly-rendered chests are immediately scanned regardless of this value.",
   "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled": "Mob List",
   "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled.@Tooltip": "Renders mob list in the action bar when\nlooking directly at a chest",
   "text.autoconfig.anti-lootrun-tracker.option.mobListReachDistance": "Mob List Reach Distance",
