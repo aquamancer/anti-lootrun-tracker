@@ -19,6 +19,8 @@
   "text.autoconfig.anti-lootrun-tracker.option.renderNumber.@Tooltip": "Renders nearby mob count on chests",
   "text.autoconfig.anti-lootrun-tracker.option.recolorChest": "Free Chest Recolor",
   "text.autoconfig.anti-lootrun-tracker.option.recolorChest.@Tooltip": "Changes the color of chests with no nearby mobs",
+  "text.autoconfig.anti-lootrun-tracker.option.recolor": "Free Chest Recolor Color",
+  "text.autoconfig.anti-lootrun-tracker.option.recolor.@Tooltip": "Free chests will be rendered with this color",
   "text.autoconfig.anti-lootrun-tracker.option.ignoredMobs": "Ignored MobEntities",
   "text.autoconfig.anti-lootrun-tracker.option.ignoredMobs.@Tooltip": "Names of mobs that should be ignored"
 }

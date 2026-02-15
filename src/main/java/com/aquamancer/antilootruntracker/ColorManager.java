@@ -16,19 +16,20 @@ public class ColorManager {
     /**
      * Supported chest colors.
      */
-    private enum Color {
+    // made public so ModConfig can access it
+    public enum ChestColor {
         DEFAULT, WHITE, LIGHT_GRAY, GRAY, BLACK, BROWN, RED, ORANGE, YELLOW, LIME, GREEN, CYAN, LIGHT_BLUE, BLUE, PURPLE, MAGENTA, PINK
     }
 
-    private static final Map<Map.Entry<Color, ChestType>, SpriteIdentifier> spriteLookup = new HashMap<>();
+    private static final Map<Map.Entry<ChestColor, ChestType>, SpriteIdentifier> spriteLookup = new HashMap<>();
 
     static {
-        for (Color color : Color.values()) {
-            if (color == Color.DEFAULT) continue;
+        for (ChestColor color : ChestColor.values()) {
+            if (color == ChestColor.DEFAULT) continue;
 
             String filename = color.name().toLowerCase();
             // add singlechest texture to map
-            Map.Entry<Color, ChestType> key = new AbstractMap.SimpleImmutableEntry<>(color, ChestType.SINGLE);
+            Map.Entry<ChestColor, ChestType> key = new AbstractMap.SimpleImmutableEntry<>(color, ChestType.SINGLE);
             spriteLookup.put(key, createChestTextureId(filename));
             // add doublechest left texture to map
             key = new AbstractMap.SimpleImmutableEntry<>(color, ChestType.LEFT);
@@ -51,16 +52,16 @@ public class ColorManager {
      */
     @Nullable
     public static SpriteIdentifier getChestSpriteBasedOnMobs(BlockEntity chest, ChestType type) {
-        Color color = getChestColor(chest);
+        ChestColor color = getChestColor(chest);
         return spriteLookup.get(new AbstractMap.SimpleImmutableEntry<>(color, type));
     }
 
-    private static Color getChestColor(BlockEntity chest) {
+    private static ChestColor getChestColor(BlockEntity chest) {
         long mobsNearby = AntiLootrunTracker.getMobsNearby(chest.getPos()).count();
         if (mobsNearby == 0) {
-            return Color.LIME;
+            return AntiLootrunTracker.config.getRecolor();
         } else {
-            return Color.DEFAULT;
+            return ChestColor.DEFAULT;
         }
     }
 
