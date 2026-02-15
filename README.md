@@ -50,3 +50,7 @@ This mod focuses on the *mob points* mechanic, since it's nearly impossible to b
 <img src="https://github.com/aquamancer/anti-lootrun-tracker/blob/main/src/main/resources/screenshots/demofree.png">
 
 *Chest with no mobs close enough to cost points*
+
+<img src="https://github.com/aquamancer/anti-lootrun-tracker/blob/main/src/main/resources/screenshots/configdemo.png">
+
+*Config screen*
