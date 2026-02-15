@@ -1,4 +1,4 @@
-package com.aquamancer.mixin;
+package com.aquamancer.antilootruntracker.mixin;
 
 import net.minecraft.client.gui.hud.PlayerListHud;
 import net.minecraft.text.Text;

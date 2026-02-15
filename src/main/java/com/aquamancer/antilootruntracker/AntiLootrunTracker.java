@@ -1,6 +1,6 @@
-package com.aquamancer;
+package com.aquamancer.antilootruntracker;
 
-import com.aquamancer.config.ModConfig;
+import com.aquamancer.antilootruntracker.config.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;

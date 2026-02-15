@@ -1,4 +1,4 @@
-package com.aquamancer;
+package com.aquamancer.antilootruntracker;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.ChestType;

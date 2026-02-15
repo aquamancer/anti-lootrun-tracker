@@ -1,7 +1,7 @@
-package com.aquamancer.mixin;
+package com.aquamancer.antilootruntracker.mixin;
 
-import com.aquamancer.AntiLootrunTracker;
-import com.aquamancer.ColorManager;
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.ColorManager;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.enums.ChestType;

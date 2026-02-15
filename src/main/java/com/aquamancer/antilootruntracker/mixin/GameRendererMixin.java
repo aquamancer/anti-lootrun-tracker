@@ -1,7 +1,7 @@
-package com.aquamancer.mixin;
+package com.aquamancer.antilootruntracker.mixin;
 
-import com.aquamancer.AntiLootrunTracker;
-import com.aquamancer.MobProximityList;
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.MobProximityList;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;

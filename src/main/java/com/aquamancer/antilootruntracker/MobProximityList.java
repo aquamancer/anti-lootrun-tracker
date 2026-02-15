@@ -1,4 +1,4 @@
-package com.aquamancer;
+package com.aquamancer.antilootruntracker;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;

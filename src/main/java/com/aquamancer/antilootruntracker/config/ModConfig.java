@@ -1,6 +1,6 @@
-package com.aquamancer.config;
+package com.aquamancer.antilootruntracker.config;
 
-import com.aquamancer.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
@@ -13,11 +13,11 @@ public class ModConfig implements ConfigData {
     @Tooltip
     private boolean modEnabled = true;
     @Tooltip
-    private String shardsEnabledIn = "(valley|isles|ring|skt)";
+    private String shardsEnabledIn = "(valley|isles|ring|skt).*";
     @Tooltip
     private boolean mobListEnabled = true;
     @Tooltip
-    private int mobListReachDistance = 40;
+    private int mobListReachDistance = 30;
     @Tooltip
     private int mobListDisableDuration = 10;
     @Tooltip

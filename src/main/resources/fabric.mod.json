@@ -15,10 +15,10 @@
 	"environment": "client",
 	"entrypoints": {
 		"client": [
-			"com.aquamancer.AntiLootrunTracker"
+			"com.aquamancer.antilootruntracker.AntiLootrunTracker"
 		],
 		"modmenu": [
-			"com.aquamancer.config.ModMenuApiImpl"
+			"com.aquamancer.antilootruntracker.config.ModMenuApiImpl"
 		]
 	},
 	"mixins": [

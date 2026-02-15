@@ -1,6 +1,6 @@
-package com.aquamancer.mixin;
+package com.aquamancer.antilootruntracker.mixin;
 
-import com.aquamancer.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;

@@ -1,6 +1,6 @@
-package com.aquamancer;
+package com.aquamancer.antilootruntracker;
 
-import com.aquamancer.mixin.TabHudAccessor;
+import com.aquamancer.antilootruntracker.mixin.TabHudAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -25,7 +25,7 @@ public class ShardInfo {
         }
 	}
 
-	public static String getShortShard() {
-		return getCurrentShard().replaceFirst("-\\d+$", "");
-	}
+//	public static String getShortShard() {
+//		return getCurrentShard().replaceFirst("-\\d+$", "");
+//	}
 }

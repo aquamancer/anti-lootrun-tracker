@@ -1,6 +1,6 @@
-package com.aquamancer.mixin;
+package com.aquamancer.antilootruntracker.mixin;
 
-import com.aquamancer.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
