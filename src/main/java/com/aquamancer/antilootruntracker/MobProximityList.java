@@ -38,17 +38,46 @@ public class MobProximityList {
         }
 
         MutableText result = Text.empty();
+        int maxChars = AntiLootrunTracker.config.getMobListMaxChars();
+        int resultLength = 0;
+        boolean withinCharLimit = true;
         for (Map.Entry<Integer, List<MobEntity>> distanceGroup : mobsByDistance.entrySet().stream().sorted(Comparator.comparingInt(pair -> pair.getKey())).toList()) {
             Integer distance = distanceGroup.getKey();
             List<MobEntity> mobs = distanceGroup.getValue();
-            result.append(Text.literal("  " + distance + "m (" + mobs.size() + "): ").formatted(Formatting.RED, Formatting.BOLD));
+            result.append(Text.literal(String.valueOf(distance)).formatted(Formatting.RED, Formatting.BOLD));
+            result.append(Text.literal("m").formatted(Formatting.RED));
+            result.append(Text.literal(": ").formatted(Formatting.GOLD));
+            // temp string for mob names to check if the group will go over the character limit
+            MutableText temp = Text.empty();
+            int tempLength = 0;
             for (int i = 0; i < mobs.size(); i++) {
-                if (i != 0) {
-                    result.append(", ");
+                if (!withinCharLimit) {
+                    break;
                 }
-                String mobName = EntityType.getId(mobs.get(i).getType()).getPath();
-                result.append(mobName);
+
+                if (i != 0) {
+                    temp.append(", ");
+                }
+                Text mobName;
+                if (mobs.get(i).getCustomName() != null) {
+                    mobName = mobs.get(i).getCustomName();
+                } else {
+                    mobName = mobs.get(i).getDisplayName();
+                }
+                temp.append(mobName);
+                tempLength += mobName.getString().length();
+                if (resultLength + tempLength > maxChars) {
+                    withinCharLimit = false;
+                    break;
+                }
             }
+            if (withinCharLimit) {
+                result.append(temp);
+                resultLength += tempLength;
+            } else {
+                result.append(Text.literal(String.valueOf(mobs.size())));
+            }
+            result.append("  ");
         }
 
         return result;

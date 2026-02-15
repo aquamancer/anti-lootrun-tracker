@@ -1,6 +1,7 @@
 package com.aquamancer.antilootruntracker.config;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.ColorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
@@ -23,9 +24,13 @@ public class ModConfig implements ConfigData {
     @Tooltip
     private int mobListDisableDuration = 20;
     @Tooltip
+    private int mobListMaxChars = 80;
+    @Tooltip
     private boolean renderNumber = true;
     @Tooltip
     private boolean recolorChest = true;
+    @Tooltip
+    private ColorManager.ChestColor recolor = ColorManager.ChestColor.LIME;
     @Tooltip
     private List<String> ignoredMobs = new ArrayList<>() {{
         add("allay");
@@ -52,6 +57,10 @@ public class ModConfig implements ConfigData {
         return mobListDisableDuration;
     }
 
+    public int getMobListMaxChars() {
+        return mobListMaxChars;
+    }
+
     public int getMobListReachDistance() {
         return mobListReachDistance;
     }
@@ -62,6 +71,10 @@ public class ModConfig implements ConfigData {
 
     public boolean recolorChest() {
         return recolorChest;
+    }
+
+    public ColorManager.ChestColor getRecolor() {
+        return recolor;
     }
 
     public List<String> getIgnoredMobs() {
