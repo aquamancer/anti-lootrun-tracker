@@ -19,7 +19,7 @@ public class ModConfig implements ConfigData {
     @Tooltip
     private int mobListReachDistance = 30;
     @Tooltip
-    private int mobListDisableDuration = 10;
+    private int mobListDisableDuration = 20;
     @Tooltip
     private boolean renderNumber = true;
     @Tooltip
