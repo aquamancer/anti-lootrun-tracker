@@ -8,7 +8,7 @@
   "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval": "Entity Scan Interval",
   "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval.@Tooltip": "How often to re-scan mobs near each chest (every n ticks, 1s = 20 ticks).\nValues less than 2 scan every tick.\nLower values increase responsiveness of mobs entering/leaving the range of a chest\nat the cost of very minor game performance.\nMobs around newly-rendered chests are immediately scanned regardless of this value.",
   "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled": "Action Bar Mob List",
-  "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled.@Tooltip": "Renders mob list in the action bar when\nhovering over a chest",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled.@Tooltip": "Renders mob list in the action bar when\nlooking directly at a chest",
   "text.autoconfig.anti-lootrun-tracker.option.mobListReachDistance": "Mob List Reach Distance",
   "text.autoconfig.anti-lootrun-tracker.option.mobListReachDistance.@Tooltip": "Furthest distance (in blocks) the player\ncan be from a chest to render mob list",
   "text.autoconfig.anti-lootrun-tracker.option.mobListDisableDuration": "Mob List Disable Duration",
