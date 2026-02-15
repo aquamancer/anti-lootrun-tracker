@@ -14,13 +14,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
+import java.util.function.BiConsumer;
 
 @Mixin(ChestBlockEntityRenderer.class)
 public class ChestBlockEntityRendererMixin {
@@ -56,16 +59,30 @@ public class ChestBlockEntityRendererMixin {
         String text = String.valueOf(mobsNearby);
         float width = textRenderer.getWidth(text);
 
-        // draw # of mobs on Chest
-        // TOP FACE
+        drawTopFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        drawBottomFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        drawFrontFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        drawBackFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
+        drawRightFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        drawLeftFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
+    }
+    // RotationAxis.POSITIVE_X is the axis from left face to right face, rotationDegrees rotates clockwise when viewing left face
+    // POSITIVE_Z is axis from front to back face, rotationDegrees rotates clockwise when viewing front
+    // POSITIVE_Y is axis from top to bottom, rotationdegrees rotatesclockwise when viewing top
+    @Unique
+    private void drawFrontFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
-        matrices.translate(0.5, 1.0, 0.5);  // top of chest, centered
-        matrices.scale(1/18f, 1/18f, 1/18f);
+        matrices.translate(0.5, 0.5, 0.5);  // center of chest
+        // translate 0.5 (+0.05 to avoid clipping with the chest's lock) units towards the front of chest
+        Vector3f offset = chestFacing.getUnitVector().mul(0.525f);
+        matrices.translate(offset.x, offset.y, offset.z);
         // face the correct orientation
-        matrices.multiply(chestFacing.getRotationQuaternion());
+        matrices.multiply(chestFacing.getRotationQuaternion());  // correct orientation, but facing up
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));  // facing front
+        matrices.scale(1/18f, 1/18f, 1/18f);
         textRenderer.draw(
                 text,
-                -width/2f,
+                -width / 2f,
                 -4f,
                 Color.RED.getRGB(),
                 false,
@@ -76,16 +93,116 @@ public class ChestBlockEntityRendererMixin {
                 0xF000F0  // max lighting
         );
         matrices.pop();
+    }
 
-        // FRONT FACE
+    @Unique
+    private void drawTopFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+        matrices.push();
+        matrices.translate(0.5, 0.925, 0.5);  // top of chest, centered
+        matrices.scale(1/18f, 1/18f, 1/18f);
+        // face the correct orientation
+        matrices.multiply(chestFacing.getRotationQuaternion());
+        textRenderer.draw(
+                text,
+                -width / 2f,
+                -4f,
+                Color.RED.getRGB(),
+                false,
+                matrices.peek().getPositionMatrix(),
+                vertexConsumers,
+                TextRenderer.TextLayerType.NORMAL,
+                0,
+                0xF000F0  // max lighting
+        );
+        matrices.pop();
+    }
+
+    @Unique
+    private void drawBottomFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+        matrices.push();
+        matrices.translate(0.5, -0.025, 0.5);  // bottom of chest, centered
+        matrices.scale(1/18f, 1/18f, 1/18f);
+        // face the correct orientation
+        matrices.multiply(chestFacing.getRotationQuaternion());
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));  // flip to face downward
+        textRenderer.draw(
+                text,
+                -width / 2f,
+                -4f,
+                Color.RED.getRGB(),
+                false,
+                matrices.peek().getPositionMatrix(),
+                vertexConsumers,
+                TextRenderer.TextLayerType.NORMAL,
+                0,
+                0xF000F0  // max lighting
+        );
+        matrices.pop();
+    }
+
+    @Unique
+    private void drawRightFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+        matrices.push();
+        matrices.translate(0.5, 0.5, 0.5); // center of chest
+        Vector3f rightOffset = chestFacing.getUnitVector().rotateY(90).mul(0.525f); // move right
+        matrices.translate(rightOffset.x, rightOffset.y, rightOffset.z);
+        Vector3f frontOffset = chestFacing.getUnitVector().mul(0.2f); // move front a bit to account for text width
+        matrices.translate(frontOffset.x, frontOffset.y, frontOffset.z);
+        matrices.multiply(chestFacing.getRotationQuaternion());
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90)); // upright
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(270)); // facing right
+        matrices.scale(1/18f, 1/18f, 1/18f);
+        textRenderer.draw(
+                text,
+                -width / 2f,
+                -4f,
+                Color.RED.getRGB(),
+                false,
+                matrices.peek().getPositionMatrix(),
+                vertexConsumers,
+                TextRenderer.TextLayerType.NORMAL,
+                0,
+                0xF000F0
+        );
+        matrices.pop();
+    }
+    @Unique
+    private void drawLeftFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+        matrices.push();
+        matrices.translate(0.5, 0.5, 0.5); // center of chest
+        Vector3f leftOffset = chestFacing.getUnitVector().rotateY(-90).mul(0.525f); // move left
+        matrices.translate(leftOffset.x, leftOffset.y, leftOffset.z);
+        Vector3f frontOffset = chestFacing.getUnitVector().mul(0.2f); // move front a bit to account for text width
+        matrices.translate(frontOffset.x, frontOffset.y, frontOffset.z);
+        matrices.multiply(chestFacing.getRotationQuaternion());
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90)); // upright
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90)); // facing right
+        matrices.scale(1/18f, 1/18f, 1/18f);
+        textRenderer.draw(
+                text,
+                -width / 2f,
+                -4f,
+                Color.RED.getRGB(),
+                false,
+                matrices.peek().getPositionMatrix(),
+                vertexConsumers,
+                TextRenderer.TextLayerType.NORMAL,
+                0,
+                0xF000F0
+        );
+        matrices.pop();
+    }
+
+    @Unique
+    private void drawBackFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);  // center of chest
-        // translate 0.5 (+0.05 to avoid clipping with the chest's lock) units towards the front of chest
-        Vector3f offset = chestFacing.getUnitVector().mul(0.55f);
+        Vector3f offset = chestFacing.getUnitVector().mul(-0.525f);
         matrices.translate(offset.x, offset.y, offset.z);
         // face the correct orientation
         matrices.multiply(chestFacing.getRotationQuaternion());  // correct orientation, but facing up
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));  // facing front
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));  // facing upright
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));  // facing back
         matrices.scale(1/18f, 1/18f, 1/18f);
         textRenderer.draw(
                 text,
