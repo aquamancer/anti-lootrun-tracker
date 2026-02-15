@@ -1,12 +1,13 @@
 {
   "required": true,
-  "package": "com.aquamancer.mixin.client",
+  "package": "com.aquamancer.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
     "GameRendererMixin",
     "TexturedRenderLayersMixin",
     "ClientPlayNetworkHandlerMixin",
-    "ChestBlockEntityRendererMixin"
+    "ChestBlockEntityRendererMixin",
+    "TabHudAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

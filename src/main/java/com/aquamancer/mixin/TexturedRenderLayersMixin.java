@@ -1,6 +1,6 @@
-package com.aquamancer.mixin.client;
+package com.aquamancer.mixin;
 
-import com.aquamancer.AntiLootrunTrackerClient;
+import com.aquamancer.AntiLootrunTracker;
 import com.aquamancer.ColorManager;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
@@ -19,7 +19,7 @@ public class TexturedRenderLayersMixin {
      */
     @Inject(at = @At("HEAD"), cancellable = true, method = "getChestTextureId(Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/block/enums/ChestType;Z)Lnet/minecraft/client/util/SpriteIdentifier;")
     private static void getChestTexture(BlockEntity chest, ChestType type, boolean christmas, CallbackInfoReturnable<SpriteIdentifier> cir) {
-        if (!AntiLootrunTrackerClient.shouldRecolorFreeChest()) {
+        if (!AntiLootrunTracker.shouldRecolorFreeChest()) {
             return;
         }
         if (!(chest instanceof ChestBlockEntity)) {

@@ -1,7 +1,6 @@
-package com.aquamancer.mixin.client;
+package com.aquamancer.mixin;
 
-import com.aquamancer.AntiLootrunTrackerClient;
-import com.aquamancer.ColorManager;
+import com.aquamancer.AntiLootrunTracker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -29,7 +28,7 @@ public class ChestBlockEntityRendererMixin {
      */
     @Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V")
     public void render(BlockEntity chest, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
-        if (!AntiLootrunTrackerClient.shouldRenderMobCountOnChest()) {
+        if (!AntiLootrunTracker.shouldRenderMobCountOnChest()) {
             return;
         }
 
@@ -39,8 +38,8 @@ public class ChestBlockEntityRendererMixin {
             return;
         }
         BlockPos chestPos = chest.getPos();
-        int mobsNearby = Math.min(ColorManager.getMobsNearby(chestPos), 9);  // # of mobs nearby, limit 1 digit
-        if (mobsNearby <= 0) {
+        int mobsNearby = Math.min(AntiLootrunTracker.getMobsNearby(chestPos).size(), 9);  // # of mobs nearby, limit 1 digit
+        if (mobsNearby == 0) {
             return;
         }
         BlockState chestState = world.getBlockState(chestPos);

@@ -2,13 +2,8 @@ package com.aquamancer;
 
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.ChestType;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.SpriteIdentifier;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.AbstractMap;
@@ -45,7 +40,7 @@ public class ColorManager {
     }
 
     private static SpriteIdentifier createChestTextureId(String variant) {
-        return new SpriteIdentifier(CHEST_ATLAS_TEXTURE, new Identifier(AntiLootrunTrackerClient.MOD_ID, "entity/chest/" + variant));
+        return new SpriteIdentifier(CHEST_ATLAS_TEXTURE, new Identifier(AntiLootrunTracker.MOD_ID, "entity/chest/" + variant));
     }
 
     /**
@@ -61,25 +56,13 @@ public class ColorManager {
     }
 
     private static Color getChestColor(BlockEntity chest) {
-        int mobsNearby = getMobsNearby(chest.getPos());
-        if (mobsNearby <= 0) {
+        int mobsNearby = AntiLootrunTracker.getMobsNearby(chest.getPos()).size();
+        if (mobsNearby == 0) {
             return Color.LIME;
         } else {
             return Color.DEFAULT;
         }
     }
 
-    public static int getMobsNearby(BlockPos pos) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null) {
-            return 0;
-        }
-
-        return client.world.getEntitiesByClass(
-                MobEntity.class,
-                new Box(pos).expand(AntiLootrunTrackerClient.MOB_SEARCH_RADIUS),
-                LivingEntity::isAlive
-        ).size();
-    }
 
 }

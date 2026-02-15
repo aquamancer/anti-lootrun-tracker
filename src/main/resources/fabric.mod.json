@@ -2,21 +2,20 @@
 	"schemaVersion": 1,
 	"id": "anti-lootrun-tracker",
 	"version": "${version}",
-	"name": "anti-lootrun-tracker",
+	"name": "Anti Lootrun Tracker",
 	"description": "Displays the number of mobs nearby a Chest, made specifically to address Monumenta's LootingLimiter",
 	"authors": [
 		"aquamancer"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/aquamancer/anti-lootrun-tracker/"
 	},
 	"license": "MIT License",
 	"icon": "assets/anti-lootrun-tracker/icon.png",
-	"environment": "*",
+	"environment": "client",
 	"entrypoints": {
 		"client": [
-			"com.aquamancer.AntiLootrunTrackerClient"
+			"com.aquamancer.AntiLootrunTracker"
 		],
 		"modmenu": [
 			"com.aquamancer.config.ModMenuApiImpl"
@@ -24,7 +23,7 @@
 	},
 	"mixins": [
 		{
-			"config": "anti-lootrun-tracker.client.mixins.json",
+			"config": "anti-lootrun-tracker.mixins.json",
 			"environment": "client"
 		}
 	],

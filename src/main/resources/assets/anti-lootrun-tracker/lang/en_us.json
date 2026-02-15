@@ -1,0 +1,18 @@
+{
+  "text.autoconfig.anti-lootrun-tracker.option.modEnabled": "Enabled",
+  "text.autoconfig.anti-lootrun-tracker.option.modEnabled.@Tooltip": "Disables the entire mod",
+  "text.autoconfig.anti-lootrun-tracker.option.shardsEnabledIn": "Shards Enabled in",
+  "text.autoconfig.anti-lootrun-tracker.option.shardsEnabledIn.@Tooltip": "Regex of shard names to match for this mod to be active",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled": "Action Bar Mob List",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListEnabled.@Tooltip": "Renders mob list in the action bar when\nhovering over a chest",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListReachDistance": "Mob List Reach Distance",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListReachDistance.@Tooltip": "Furthest distance (in blocks) the player\ncan be from a chest to render mob list",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListDisableDuration": "Mob List Disable Duration",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListDisableDuration.@Tooltip": "Duration (in ticks, 1s = 20 ticks) to disable rendering the action bar mob list\nafter an external action bar message is received, so lootrun block messages\nor other server messages do not get completely blocked out\nwhile the mob list is being rendered.",
+  "text.autoconfig.anti-lootrun-tracker.option.renderNumber": "Mob Number on Chests",
+  "text.autoconfig.anti-lootrun-tracker.option.renderNumber.@Tooltip": "Renders nearby mob count on chests",
+  "text.autoconfig.anti-lootrun-tracker.option.recolorChest": "Free Chest Recolor",
+  "text.autoconfig.anti-lootrun-tracker.option.recolorChest.@Tooltip": "Changes the color of chests with no nearby mobs",
+  "text.autoconfig.anti-lootrun-tracker.option.ignoredMobs": "Ignored MobEntities",
+  "text.autoconfig.anti-lootrun-tracker.option.ignoredMobs.@Tooltip": "Names of mobs that should be ignored"
+}

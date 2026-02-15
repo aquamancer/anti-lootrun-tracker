@@ -2,7 +2,16 @@
 
 Displays the number of mobs in a 12-block radius around a chest.
 
-If there are no mobs nearby, the chest gets colored green!
+If there are no mobs nearby, the chest gets colored green.
+
+This mod is compatible with Fabric 1.20.4
+
+## Building
+        git clone https://github.com/aquamancer/anti-lootrun-tracker
+        cd anti-lootrun-tracker
+        ./gradlew build
+
+Output .jar is located at `build/libs/anti-lootrun-tracker-1.0.0.jar`
 
 ## Monumenta's Anti-Lootrun Mechanics
 
@@ -31,3 +40,13 @@ This mod focuses on the *mob points* mechanic, since it's nearly impossible to b
 * Players can quickly identify **free chests** (no mobs within `12` blocks of the chest), and no *mob points* will be deducted when looting!
 * Players can optimize lootrun routes to encounter as many *free chests* as possible 
 * Decide whether to fight nearby mobs before looting a chest if only a few mobs prevent the chest from being *free.*
+
+## Screenshots
+
+<img src="https://github.com/aquamancer/anti-lootrun-tracker/blob/main/src/main/resources/screenshots/demo1.png">
+
+*Chest with 2 mobs close enough to cost points*
+
+<img src="https://github.com/aquamancer/anti-lootrun-tracker/blob/main/src/main/resources/screenshots/demofree.png">
+
+*Chest with no mobs close enough to cost points*

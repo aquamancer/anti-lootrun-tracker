@@ -1,6 +1,6 @@
-package com.aquamancer.mixin.client;
+package com.aquamancer.mixin;
 
-import com.aquamancer.AntiLootrunTrackerClient;
+import com.aquamancer.AntiLootrunTracker;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.OverlayMessageS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,6 +16,6 @@ public class ClientPlayNetworkHandlerMixin {
      */
     @Inject(at = @At("HEAD"), method = "onOverlayMessage")
     public void onOverlayMessage(OverlayMessageS2CPacket packet, CallbackInfo ci) {
-        AntiLootrunTrackerClient.disableMobList(20);  // disable for 1 second
+        AntiLootrunTracker.disableMobList();  // temporarily disable mob list
     }
 }
