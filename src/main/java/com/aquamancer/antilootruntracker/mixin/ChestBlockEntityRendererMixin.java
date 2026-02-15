@@ -1,6 +1,7 @@
 package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import me.shedaniel.math.Color;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -14,16 +15,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
-import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.awt.*;
-import java.util.function.BiConsumer;
 
 @Mixin(ChestBlockEntityRenderer.class)
 public class ChestBlockEntityRendererMixin {
@@ -58,25 +55,28 @@ public class ChestBlockEntityRendererMixin {
         TextRenderer textRenderer = client.textRenderer;
         String text = String.valueOf(mobsNearby);
         float width = textRenderer.getWidth(text);
+        float widthXOffset = -width / 2;
+        int color = AntiLootrunTracker.config.getNumberColor();
 
         if (AntiLootrunTracker.config.renderTopFace())
-            drawTopFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+            drawTopFace(text, color, widthXOffset, chestFacing, textRenderer,  matrices, vertexConsumers);
         if (AntiLootrunTracker.config.renderBottomFace())
-            drawBottomFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+            drawBottomFace(text, color, widthXOffset, chestFacing, textRenderer,  matrices, vertexConsumers);
         if (AntiLootrunTracker.config.renderFrontFace())
-            drawFrontFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+            drawFrontFace(text, color, widthXOffset, chestFacing, textRenderer,  matrices, vertexConsumers);
         if (AntiLootrunTracker.config.renderBackFace())
-            drawBackFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
+            drawBackFace(text, color, widthXOffset, chestFacing, textRenderer,  matrices, vertexConsumers);
         if (AntiLootrunTracker.config.renderRightFace())
-            drawRightFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+            drawRightFace(text, color, widthXOffset, chestFacing, textRenderer,  matrices, vertexConsumers);
         if (AntiLootrunTracker.config.renderLeftFace())
-            drawLeftFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
+            drawLeftFace(text, color, widthXOffset, chestFacing, textRenderer,  matrices, vertexConsumers);
     }
+
     // RotationAxis.POSITIVE_X is the axis from left face to right face, rotationDegrees rotates clockwise when viewing left face
     // POSITIVE_Z is axis from front to back face, rotationDegrees rotates clockwise when viewing front
     // POSITIVE_Y is axis from top to bottom, rotationdegrees rotatesclockwise when viewing top
     @Unique
-    private void drawFrontFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void drawFrontFace(String text, int color, float widthXOffset, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);  // center of chest
         // translate 0.5 (+0.05 to avoid clipping with the chest's lock) units towards the front of chest
@@ -88,9 +88,9 @@ public class ChestBlockEntityRendererMixin {
         matrices.scale(1/18f, 1/18f, 1/18f);
         textRenderer.draw(
                 text,
-                -width / 2f,
+                widthXOffset,
                 -4f,
-                Color.RED.getRGB(),
+                color,
                 false,
                 matrices.peek().getPositionMatrix(),
                 vertexConsumers,
@@ -102,7 +102,7 @@ public class ChestBlockEntityRendererMixin {
     }
 
     @Unique
-    private void drawTopFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void drawTopFace(String text, int color, float widthXOffset, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, 0.925, 0.5);  // top of chest, centered
         matrices.scale(1/18f, 1/18f, 1/18f);
@@ -110,9 +110,9 @@ public class ChestBlockEntityRendererMixin {
         matrices.multiply(chestFacing.getRotationQuaternion());
         textRenderer.draw(
                 text,
-                -width / 2f,
+                widthXOffset,
                 -4f,
-                Color.RED.getRGB(),
+                color,
                 false,
                 matrices.peek().getPositionMatrix(),
                 vertexConsumers,
@@ -124,7 +124,7 @@ public class ChestBlockEntityRendererMixin {
     }
 
     @Unique
-    private void drawBottomFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void drawBottomFace(String text, int color, float widthXOffset, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, -0.025, 0.5);  // bottom of chest, centered
         matrices.scale(1/18f, 1/18f, 1/18f);
@@ -133,9 +133,9 @@ public class ChestBlockEntityRendererMixin {
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));  // flip to face downward
         textRenderer.draw(
                 text,
-                -width / 2f,
+                widthXOffset,
                 -4f,
-                Color.RED.getRGB(),
+                color,
                 false,
                 matrices.peek().getPositionMatrix(),
                 vertexConsumers,
@@ -147,7 +147,7 @@ public class ChestBlockEntityRendererMixin {
     }
 
     @Unique
-    private void drawRightFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void drawRightFace(String text, int color, float widthXOffset, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5); // center of chest
         Vector3f rightOffset = chestFacing.getUnitVector().rotateY(90).mul(0.525f); // move right
@@ -160,9 +160,9 @@ public class ChestBlockEntityRendererMixin {
         matrices.scale(1/18f, 1/18f, 1/18f);
         textRenderer.draw(
                 text,
-                -width / 2f,
+                widthXOffset,
                 -4f,
-                Color.RED.getRGB(),
+                color,
                 false,
                 matrices.peek().getPositionMatrix(),
                 vertexConsumers,
@@ -172,8 +172,9 @@ public class ChestBlockEntityRendererMixin {
         );
         matrices.pop();
     }
+
     @Unique
-    private void drawLeftFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void drawLeftFace(String text, int color, float widthXOffset, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5); // center of chest
         Vector3f leftOffset = chestFacing.getUnitVector().rotateY(-90).mul(0.525f); // move left
@@ -186,9 +187,9 @@ public class ChestBlockEntityRendererMixin {
         matrices.scale(1/18f, 1/18f, 1/18f);
         textRenderer.draw(
                 text,
-                -width / 2f,
+                widthXOffset,
                 -4f,
-                Color.RED.getRGB(),
+                color,
                 false,
                 matrices.peek().getPositionMatrix(),
                 vertexConsumers,
@@ -200,7 +201,7 @@ public class ChestBlockEntityRendererMixin {
     }
 
     @Unique
-    private void drawBackFace(String text, float width, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
+    private void drawBackFace(String text, int color, float widthXOffset, Direction chestFacing, TextRenderer textRenderer, MatrixStack matrices, VertexConsumerProvider vertexConsumers) {
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);  // center of chest
         Vector3f offset = chestFacing.getUnitVector().mul(-0.525f);
@@ -212,9 +213,9 @@ public class ChestBlockEntityRendererMixin {
         matrices.scale(1/18f, 1/18f, 1/18f);
         textRenderer.draw(
                 text,
-                -width / 2f,
+                widthXOffset,
                 -4f,
-                Color.RED.getRGB(),
+                color,
                 false,
                 matrices.peek().getPositionMatrix(),
                 vertexConsumers,

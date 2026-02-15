@@ -4,9 +4,10 @@ import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ColorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.ColorPicker;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
+import me.shedaniel.math.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,9 @@ public class ModConfig implements ConfigData {
     @Tooltip
     private boolean renderNumber = true;
     @Tooltip
+    @ColorPicker
+    private int numberColor = 0xFF0000;
+    @Tooltip
     @CollapsibleObject
     private ChestFaces chestFaces = new ChestFaces();
     @Tooltip
@@ -42,7 +46,10 @@ public class ModConfig implements ConfigData {
         add("villager");
     }};
 
-    static class ChestFaces {
+    private static class MobList {
+
+    }
+    private static class ChestFaces {
         private boolean topFace = true;
         private boolean frontFace = true;
         private boolean backFace = true;
@@ -81,6 +88,10 @@ public class ModConfig implements ConfigData {
 
     public boolean renderNumber() {
         return renderNumber;
+    }
+
+    public int getNumberColor() {
+        return numberColor;
     }
 
     public boolean renderTopFace() {
