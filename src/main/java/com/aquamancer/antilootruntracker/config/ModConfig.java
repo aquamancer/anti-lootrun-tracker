@@ -4,7 +4,9 @@ import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ColorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.BoundedDiscrete;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.ColorPicker;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
@@ -79,6 +81,8 @@ public class ModConfig implements ConfigData {
         private int mobListDisableDuration = 20;
         @Tooltip
         private int mobListMaxChars = 80;
+        @Tooltip
+        private boolean displayFreeMessage = false;
     }
 
     private static class ChestNumberOptions {
@@ -126,6 +130,10 @@ public class ModConfig implements ConfigData {
 
     public int getMobListReachDistance() {
         return mobListOptions.mobListReachDistance;
+    }
+
+    public boolean displayFreeMessage() {
+        return mobListOptions.displayFreeMessage;
     }
 
     public boolean renderNumber() {
