@@ -1,4 +1,6 @@
 {
+  "text.autoconfig.anti-lootrun-tracker.title": "Anti Lootrun Tracker Configuration",
+
   "text.autoconfig.anti-lootrun-tracker.option.modEnabled": "Enabled",
   "text.autoconfig.anti-lootrun-tracker.option.modEnabled.@Tooltip": "Disables the entire mod",
   "text.autoconfig.anti-lootrun-tracker.option.shardsEnabledIn": "Shards Enabled in",
