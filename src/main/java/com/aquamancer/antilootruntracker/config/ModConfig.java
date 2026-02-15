@@ -4,9 +4,12 @@ import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ColorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.ColorPicker;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.TransitiveObject;
+
 import me.shedaniel.math.Color;
 
 import java.util.ArrayList;
@@ -20,35 +23,48 @@ public class ModConfig implements ConfigData {
     private String shardsEnabledIn = "(valley|isles|ring|skt).*";
     @Tooltip
     private int entityScanInterval = 4;
-    @Tooltip
-    private boolean mobListEnabled = true;
-    @Tooltip
-    private int mobListReachDistance = 30;
-    @Tooltip
-    private int mobListDisableDuration = 20;
-    @Tooltip
-    private int mobListMaxChars = 80;
-    @Tooltip
-    private boolean renderNumber = true;
-    @Tooltip
-    @ColorPicker
-    private int numberColor = 0xFF0000;
-    @Tooltip
-    @CollapsibleObject
-    private ChestFaces chestFaces = new ChestFaces();
+
     @Tooltip
     private boolean recolorChest = true;
     @Tooltip
     private ColorManager.ChestColor recolor = ColorManager.ChestColor.LIME;
+
+    @Tooltip
+    @CollapsibleObject
+    MobListOptions mobListOptions = new MobListOptions();
+
+    @Tooltip
+    @CollapsibleObject
+    ChestNumberOptions chestNumberOptions = new ChestNumberOptions();
+
     @Tooltip
     private List<String> ignoredMobs = new ArrayList<>() {{
         add("allay");
         add("villager");
     }};
 
-    private static class MobList {
 
+    private static class MobListOptions {
+        @Tooltip
+        private boolean mobListEnabled = true;
+        @Tooltip
+        private int mobListReachDistance = 30;
+        @Tooltip
+        private int mobListDisableDuration = 20;
+        @Tooltip
+        private int mobListMaxChars = 80;
     }
+
+    private static class ChestNumberOptions {
+        @Tooltip
+        private boolean renderNumber = true;
+        @ColorPicker
+        private int numberColor = 0xFF0000;
+        @Tooltip
+        @TransitiveObject
+        private ChestFaces chestFaces = new ChestFaces();
+    }
+
     private static class ChestFaces {
         private boolean topFace = true;
         private boolean frontFace = true;
@@ -71,51 +87,51 @@ public class ModConfig implements ConfigData {
     }
 
     public boolean isMobListEnabled() {
-        return mobListEnabled;
+        return mobListOptions.mobListEnabled;
     }
 
     public int getMobListDisableDuration() {
-        return mobListDisableDuration;
+        return mobListOptions.mobListDisableDuration;
     }
 
     public int getMobListMaxChars() {
-        return mobListMaxChars;
+        return mobListOptions.mobListMaxChars;
     }
 
     public int getMobListReachDistance() {
-        return mobListReachDistance;
+        return mobListOptions.mobListReachDistance;
     }
 
     public boolean renderNumber() {
-        return renderNumber;
+        return chestNumberOptions.renderNumber;
     }
 
     public int getNumberColor() {
-        return numberColor;
+        return chestNumberOptions.numberColor;
     }
 
     public boolean renderTopFace() {
-        return chestFaces.topFace;
+        return chestNumberOptions.chestFaces.topFace;
     }
 
     public boolean renderFrontFace() {
-        return chestFaces.frontFace;
+        return chestNumberOptions.chestFaces.frontFace;
     }
 
     public boolean renderBackFace() {
-        return chestFaces.backFace;
+        return chestNumberOptions.chestFaces.backFace;
     }
 
     public boolean renderLeftFace() {
-        return chestFaces.leftFace;
+        return chestNumberOptions.chestFaces.leftFace;
     }
 
     public boolean renderRightFace() {
-        return chestFaces.rightFace;
+        return chestNumberOptions.chestFaces.rightFace;
     }
 
     public boolean renderBottomFace() {
-        return chestFaces.bottomFace;
+        return chestNumberOptions.chestFaces.bottomFace;
     }
 
     public boolean recolorChest() {
