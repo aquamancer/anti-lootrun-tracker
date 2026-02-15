@@ -59,12 +59,18 @@ public class ChestBlockEntityRendererMixin {
         String text = String.valueOf(mobsNearby);
         float width = textRenderer.getWidth(text);
 
-        drawTopFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
-        drawBottomFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
-        drawFrontFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
-        drawBackFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
-        drawRightFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
-        drawLeftFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
+        if (AntiLootrunTracker.config.renderTopFace())
+            drawTopFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        if (AntiLootrunTracker.config.renderBottomFace())
+            drawBottomFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        if (AntiLootrunTracker.config.renderFrontFace())
+            drawFrontFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        if (AntiLootrunTracker.config.renderBackFace())
+            drawBackFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
+        if (AntiLootrunTracker.config.renderRightFace())
+            drawRightFace(text, width, chestFacing, textRenderer,  matrices, vertexConsumers);
+        if (AntiLootrunTracker.config.renderLeftFace())
+            drawLeftFace(text, width, chestFacing, textRenderer, matrices, vertexConsumers);
     }
     // RotationAxis.POSITIVE_X is the axis from left face to right face, rotationDegrees rotates clockwise when viewing left face
     // POSITIVE_Z is axis from front to back face, rotationDegrees rotates clockwise when viewing front
@@ -172,7 +178,7 @@ public class ChestBlockEntityRendererMixin {
         matrices.translate(0.5, 0.5, 0.5); // center of chest
         Vector3f leftOffset = chestFacing.getUnitVector().rotateY(-90).mul(0.525f); // move left
         matrices.translate(leftOffset.x, leftOffset.y, leftOffset.z);
-        Vector3f frontOffset = chestFacing.getUnitVector().mul(0.2f); // move front a bit to account for text width
+        Vector3f frontOffset = chestFacing.getUnitVector().mul(0.3f); // move front a bit to account for text width
         matrices.translate(frontOffset.x, frontOffset.y, frontOffset.z);
         matrices.multiply(chestFacing.getRotationQuaternion());
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90)); // upright

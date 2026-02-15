@@ -4,6 +4,8 @@ import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ColorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 
 import java.util.ArrayList;
@@ -28,6 +30,9 @@ public class ModConfig implements ConfigData {
     @Tooltip
     private boolean renderNumber = true;
     @Tooltip
+    @CollapsibleObject
+    private ChestFaces chestFaces = new ChestFaces();
+    @Tooltip
     private boolean recolorChest = true;
     @Tooltip
     private ColorManager.ChestColor recolor = ColorManager.ChestColor.LIME;
@@ -36,6 +41,15 @@ public class ModConfig implements ConfigData {
         add("allay");
         add("villager");
     }};
+
+    static class ChestFaces {
+        private boolean topFace = true;
+        private boolean frontFace = true;
+        private boolean backFace = true;
+        private boolean leftFace = false;
+        private boolean rightFace = false;
+        private boolean bottomFace = false;
+    }
 
     public boolean isModEnabled() {
         return modEnabled;
@@ -67,6 +81,30 @@ public class ModConfig implements ConfigData {
 
     public boolean renderNumber() {
         return renderNumber;
+    }
+
+    public boolean renderTopFace() {
+        return chestFaces.topFace;
+    }
+
+    public boolean renderFrontFace() {
+        return chestFaces.frontFace;
+    }
+
+    public boolean renderBackFace() {
+        return chestFaces.backFace;
+    }
+
+    public boolean renderLeftFace() {
+        return chestFaces.leftFace;
+    }
+
+    public boolean renderRightFace() {
+        return chestFaces.rightFace;
+    }
+
+    public boolean renderBottomFace() {
+        return chestFaces.bottomFace;
     }
 
     public boolean recolorChest() {
