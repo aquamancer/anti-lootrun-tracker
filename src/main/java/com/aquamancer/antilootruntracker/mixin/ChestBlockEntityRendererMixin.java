@@ -4,6 +4,7 @@ import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -28,7 +29,8 @@ public class ChestBlockEntityRendererMixin {
      */
     @Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V")
     public void render(BlockEntity chest, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
-        if (!AntiLootrunTracker.shouldRenderMobCountOnChest()) {
+        // if !hasWorld() then the chest is being rendered in an inventory
+        if (!AntiLootrunTracker.shouldRenderMobCountOnChest() || !(chest instanceof ChestBlockEntity) || !chest.hasWorld()) {
             return;
         }
 

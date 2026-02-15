@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(PlayerListHud.class)
 public interface TabHudAccessor {
+    // used to get shard info by parsing Tab header string
     @Accessor("header")
     Text getHeader();
 }

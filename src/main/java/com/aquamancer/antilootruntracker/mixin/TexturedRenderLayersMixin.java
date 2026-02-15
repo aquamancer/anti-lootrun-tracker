@@ -22,7 +22,8 @@ public class TexturedRenderLayersMixin {
         if (!AntiLootrunTracker.shouldRecolorFreeChest()) {
             return;
         }
-        if (!(chest instanceof ChestBlockEntity)) {
+        // if !hasWorld() then the chest is being rendered in an inventory
+        if (!(chest instanceof ChestBlockEntity) || !chest.hasWorld()) {
             return;
         }
 
