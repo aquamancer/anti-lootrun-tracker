@@ -38,7 +38,7 @@ public class ChestBlockEntityRendererMixin {
             return;
         }
         BlockPos chestPos = chest.getPos();
-        int mobsNearby = Math.min(AntiLootrunTracker.getMobsNearby(chestPos).size(), 9);  // # of mobs nearby, limit 1 digit
+        long mobsNearby = Math.min(AntiLootrunTracker.getMobsNearby(chestPos).count(), 9);  // # of mobs nearby, limit 1 digit
         if (mobsNearby == 0) {
             return;
         }

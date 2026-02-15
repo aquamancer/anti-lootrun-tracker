@@ -13,12 +13,13 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class MobProximityList {
     private final Map<Integer, List<MobEntity>> mobsByDistance = new HashMap<>();
 
-    public MobProximityList(Iterable<MobEntity> mobs, Vec3d distanceFrom) {
-        for (MobEntity mob : mobs) {
+    public MobProximityList(Stream<MobEntity> mobs, Vec3d distanceFrom) {
+        mobs.forEach(mob -> {
             mobsByDistance.compute((int) Math.sqrt(mob.squaredDistanceTo(distanceFrom)),
                     (k, v) -> {
                         if (v == null) {
@@ -27,9 +28,8 @@ public class MobProximityList {
                             v.add(mob);
                             return v;
                         }
-                    }
-            );
-        }
+                    });
+        });
         for (Map.Entry<Integer, List<MobEntity>> distanceGroup : this.mobsByDistance.entrySet()) {
             distanceGroup.getValue().sort(Comparator.comparing(mob -> mob.getName().toString()));
         }

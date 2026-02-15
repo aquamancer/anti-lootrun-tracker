@@ -15,6 +15,8 @@ public class ModConfig implements ConfigData {
     @Tooltip
     private String shardsEnabledIn = "(valley|isles|ring|skt).*";
     @Tooltip
+    private int entityScanInterval = 4;
+    @Tooltip
     private boolean mobListEnabled = true;
     @Tooltip
     private int mobListReachDistance = 30;
@@ -36,6 +38,10 @@ public class ModConfig implements ConfigData {
 
     public String getShardsEnabledIn() {
         return shardsEnabledIn;
+    }
+
+    public int getEntityScanInterval() {
+        return entityScanInterval;
     }
 
     public boolean isMobListEnabled() {

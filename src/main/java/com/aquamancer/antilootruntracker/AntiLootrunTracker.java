@@ -8,35 +8,36 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 public class AntiLootrunTracker implements ClientModInitializer {
 	public static final String MOD_ID = "anti-lootrun-tracker";
 //	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final int MOB_SEARCH_RADIUS = 12;
-
 	public static ModConfig config;
+
 	private static boolean inValidShard;
+	private static final Map<BlockPos, List<MobEntity>> entityCache = new HashMap<>();
 
 	// tick counters for performance (don't run every tick) or timing logistics
 	private static int mobListDisableDurationTicks = 0;
 	private static int shardUpdateCounter = 0;
+	private static int entityCacheCounter = 0;
 
 	@Override
 	public void onInitializeClient() {
 		// This entrypoint is suitable for setting up client-specific logic, such as rendering.
 		ConfigHolder<ModConfig> configHolder = AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
 		config = configHolder.getConfig();
-//		configHolder.registerSaveListener((c, modConfig) -> {
-//			shardsEnabledIn = Pattern.compile(config.getShardsEnabledIn());
-//			return ActionResult.SUCCESS;
-//		});
-//		shardsEnabledIn = Pattern.compile(config.getShardsEnabledIn());
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			if (mobListDisableDurationTicks > 0) {
@@ -47,20 +48,30 @@ public class AntiLootrunTracker implements ClientModInitializer {
                 shardUpdateCounter = 40;
             }
             shardUpdateCounter--;
+			if (entityCacheCounter <= 0) {
+				entityCache.clear();
+				entityCacheCounter = config.getEntityScanInterval();
+			}
+			entityCacheCounter--;
         });
 	}
 
-	public static List<MobEntity> getMobsNearby(BlockPos pos) {
+	public static Stream<MobEntity> getMobsNearby(BlockPos pos) {
 		MinecraftClient client = MinecraftClient.getInstance();
 		if (client.world == null) {
-			return List.of();
+			return Stream.of();
 		}
 
-		return client.world.getEntitiesByClass(
-				MobEntity.class,
-				new Box(pos).expand(AntiLootrunTracker.MOB_SEARCH_RADIUS),
-				mob -> mob.isAlive() && config.getIgnoredMobs().stream().noneMatch(ignored -> ignored.equals(EntityType.getId(mob.getType()).getPath()))
-		);
+		// only return values in the cache, except for newly rendered chests.
+		// onInitializeClient() will clear the cache every n ticks, specified by the config
+		// which effectively updates the cache
+		return entityCache.computeIfAbsent(pos, (v) -> {
+			return client.world.getEntitiesByClass(
+					MobEntity.class,
+					new Box(pos).expand(AntiLootrunTracker.MOB_SEARCH_RADIUS),
+					mob -> mob.isAlive() && config.getIgnoredMobs().stream().noneMatch(ignored -> ignored.equals(EntityType.getId(mob.getType()).getPath()))
+			);
+		}).stream().filter(LivingEntity::isAlive);
 	}
 
 	// temporarily disables action bar enumeration and rendering of mob list
