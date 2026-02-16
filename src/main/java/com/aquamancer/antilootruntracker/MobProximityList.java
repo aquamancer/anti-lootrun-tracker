@@ -1,6 +1,5 @@
 package com.aquamancer.antilootruntracker;
 
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

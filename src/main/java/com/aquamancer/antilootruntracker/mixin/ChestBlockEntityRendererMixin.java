@@ -1,7 +1,6 @@
 package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
-import me.shedaniel.math.Color;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
