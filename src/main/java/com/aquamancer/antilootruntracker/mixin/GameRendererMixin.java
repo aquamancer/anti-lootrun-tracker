@@ -27,34 +27,15 @@ public class GameRendererMixin {
 		if (!AntiLootrunTracker.shouldRenderMobList()) return;
 
 		MinecraftClient client = MinecraftClient.getInstance();
-		if (client == null || client.world == null || client.player == null || client.cameraEntity == null) {
+		if (client == null || client.inGameHud == null) {
 			return;
 		}
 
-		// get the blockHit under the player's crosshair
-		Vec3d eyePos = client.player.getEyePos();
-		Vec3d cameraDirection = client.cameraEntity.getRotationVec(tickDelta);
-		Vec3d reach = eyePos.add(cameraDirection.multiply(AntiLootrunTracker.config.getMobListReachDistance()));
-		RaycastContext raycast = new RaycastContext(
-				eyePos,
-				reach,
-				RaycastContext.ShapeType.OUTLINE,
-				RaycastContext.FluidHandling.NONE,
-				client.cameraEntity
-		);
-
-		BlockHitResult blockHitResult = client.world.raycast(raycast);
-		BlockPos blockPos = blockHitResult.getBlockPos();
-		Block blockHit = client.world.getBlockState(blockPos).getBlock();
-
-		if (blockHit != Blocks.CHEST) {
-			return;
-		}
-
-		MobProximityList proximityList = new MobProximityList(AntiLootrunTracker.getMobsNearby(blockPos), Vec3d.of(blockPos));
-		Text toDisplay = proximityList.toText();
-		if (toDisplay != null) {
-			client.inGameHud.setOverlayMessage(proximityList.toText(), false);
+		MobProximityList mobList = AntiLootrunTracker.getActionBarMobList();
+		if (mobList == null) return;
+		Text message = AntiLootrunTracker.getActionBarMobList().toText();
+		if (message != null) {
+			client.inGameHud.setOverlayMessage(message, false);
 		}
 	}
 }
