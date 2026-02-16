@@ -34,8 +34,8 @@ public class MobProximityList {
     @Nullable
     public Text toText() {
         if (this.mobsByDistance.isEmpty()) {
-            if (AntiLootrunTracker.config.displayFreeMessage()) {
-                return Text.literal("FREE CHEST").formatted(Formatting.GREEN);
+            if (AntiLootrunTracker.config.displayFreeChestMessage() && !AntiLootrunTracker.config.getFreeChestMessage().isBlank()) {
+                return Text.literal(AntiLootrunTracker.config.getFreeChestMessage()).formatted(Formatting.GREEN);
             } else {
                 return null;
             }

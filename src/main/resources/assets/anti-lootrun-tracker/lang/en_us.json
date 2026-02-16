@@ -22,8 +22,10 @@
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListDisableDuration.@Tooltip": "Duration (in ticks, 1s = 20 ticks) to disable rendering the action bar mob list\nafter an external action bar message is received, so lootrun block messages\nor other server messages do not get completely blocked out\nwhile the mob list is being rendered.",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListMaxChars": "Mob List Max Character Width (characters)",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListMaxChars.@Tooltip": "Maximum characters of mob names to display in the action bar before\nsubsequent distance groups are replaced with a number.\nSet as 0 to disable mob names and only show numbers.",
-  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.displayFreeMessage": "Display Free Message",
-  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.displayFreeMessage.@Tooltip": "Display \"FREE CHEST\" in the action bar if the chest has no mobs nearby",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.freeMessageOptions.displayFreeChestMessage": "Display Free Chest Message",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.freeMessageOptions.@Tooltip": "Displays a message on the action bar when\nlooking directly at a chest with no nearby mobs",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.freeMessageOptions.freeChestMessage": "Free Chest Message",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.freeMessageOptions.freeChestMessage.@Tooltip": "Message to be displayed when looking\ndirectly at a chest with no nearby mobs",
 
   "text.autoconfig.anti-lootrun-tracker.option.chestNumberOptions": "Chest Number Options",
   "text.autoconfig.anti-lootrun-tracker.option.chestNumberOptions.@Tooltip": "Render nearby mob count on chests",

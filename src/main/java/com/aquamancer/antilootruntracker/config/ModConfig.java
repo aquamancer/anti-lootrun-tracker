@@ -12,7 +12,7 @@ import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.TransitiveObject;
 
-import me.shedaniel.math.Color;
+import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +71,6 @@ public class ModConfig implements ConfigData {
         add("Vigilant Mothdragon");
     }};
 
-
     private static class MobListOptions {
         @Tooltip
         private boolean mobListEnabled = true;
@@ -82,8 +81,17 @@ public class ModConfig implements ConfigData {
         @Tooltip
         private int mobListMaxChars = 80;
         @Tooltip
-        private boolean displayFreeMessage = false;
+        @TransitiveObject
+        private FreeMessageOptions freeMessageOptions = new FreeMessageOptions();
+
+        private static class FreeMessageOptions {
+            @Tooltip
+            private boolean displayFreeChestMessage = false;
+            @Tooltip
+            private String freeChestMessage = "FREE CHEST";
+        }
     }
+
 
     private static class ChestNumberOptions {
         @Tooltip
@@ -132,8 +140,12 @@ public class ModConfig implements ConfigData {
         return mobListOptions.mobListReachDistance;
     }
 
-    public boolean displayFreeMessage() {
-        return mobListOptions.displayFreeMessage;
+    public boolean displayFreeChestMessage() {
+        return mobListOptions.freeMessageOptions.displayFreeChestMessage;
+    }
+
+    public String getFreeChestMessage() {
+        return mobListOptions.freeMessageOptions.freeChestMessage;
     }
 
     public boolean renderNumber() {
