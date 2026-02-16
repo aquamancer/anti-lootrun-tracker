@@ -11,7 +11,7 @@ import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Holds the state of the mob list to be rendered, and handles update logic.
+ * Holds the state of the mob list to be rendered and handles update logic.
  * Related mixin: GameRendererMixin.java
  */
 public class MobListManager {
@@ -20,13 +20,11 @@ public class MobListManager {
     private static int disabledDuration = 0;
 
     public static void onTick() {
-        if (ticksUntilUpdate > 0) {
-            ticksUntilUpdate--;
-        }
+        // > 0 check to avoid underflow
         if (disabledDuration > 0) {
             disabledDuration--;
         }
-
+        ticksUntilUpdate--;
         if (ticksUntilUpdate <= 0) {
             update();
             ticksUntilUpdate = AntiLootrunTracker.config.getMobListUpdateInterval();

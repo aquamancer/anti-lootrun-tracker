@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
+/**
+ * Data structure representing entities grouped by distance from a block position.
+ */
 public class MobDistanceList {
     private final Map<Integer, List<MobEntity>> mobsByDistance = new HashMap<>();
 

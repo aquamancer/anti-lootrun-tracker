@@ -1,7 +1,6 @@
 package com.aquamancer.antilootruntracker;
 
 import com.aquamancer.antilootruntracker.config.ModConfig;
-import com.aquamancer.antilootruntracker.moblist.MobDistanceList;
 import com.aquamancer.antilootruntracker.moblist.MobListManager;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
@@ -19,7 +18,6 @@ import net.minecraft.util.math.Box;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class AntiLootrunTracker implements ClientModInitializer {
@@ -28,13 +26,8 @@ public class AntiLootrunTracker implements ClientModInitializer {
 	public static final int MOB_SEARCH_RADIUS = 12;
 	public static ModConfig config;
 
-	private static boolean inValidShard;
 	private static final Map<BlockPos, List<MobEntity>> entityCache = new HashMap<>();
-	private static MobDistanceList actionBarMobList;
-
-	// tick counters for performance (don't run every tick) or timing logistics
-	private static int shardUpdateCounter = 0;
-	private static int entityCacheCounter = 0;
+	private static int ticksUntilCacheUpdate = 0;
 
 	@Override
 	public void onInitializeClient() {
@@ -43,16 +36,12 @@ public class AntiLootrunTracker implements ClientModInitializer {
 		config = configHolder.getConfig();
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (shardUpdateCounter <= 0) {
-                inValidShard = Pattern.matches(config.getShardsEnabledIn(), ShardInfo.getCurrentShard());
-                shardUpdateCounter = 40;
-            }
-            shardUpdateCounter--;
-			if (entityCacheCounter <= 0) {
+			if (ticksUntilCacheUpdate <= 0) {
 				entityCache.clear();
-				entityCacheCounter = config.getEntityScanInterval();
+				ticksUntilCacheUpdate = config.getEntityScanInterval();
 			}
-			entityCacheCounter--;
+			ticksUntilCacheUpdate--;
+			ShardInfo.onTick();
 			MobListManager.onTick();
         });
 	}
@@ -81,7 +70,7 @@ public class AntiLootrunTracker implements ClientModInitializer {
 	}
 
 	public static boolean isModEnabled() {
-		return config.isModEnabled() && inValidShard;
+		return config.isModEnabled() && ShardInfo.inValidShard();
 	}
 
 	public static boolean shouldRenderMobCountOnChest() {
