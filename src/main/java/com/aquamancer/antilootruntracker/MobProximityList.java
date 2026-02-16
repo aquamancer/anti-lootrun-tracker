@@ -64,8 +64,10 @@ public class MobProximityList {
                 Text mobName;
                 if (mobs.get(i).getCustomName() != null) {
                     mobName = mobs.get(i).getCustomName();
-                } else {
+                } else if (mobs.get(i).getDisplayName() != null) {
                     mobName = mobs.get(i).getDisplayName();
+                } else {
+                    mobName = Text.of("unknown");
                 }
                 temp.append(mobName);
                 tempLength += mobName.getString().length();
