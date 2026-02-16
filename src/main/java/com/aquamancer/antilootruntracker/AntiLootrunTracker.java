@@ -1,24 +1,20 @@
 package com.aquamancer.antilootruntracker;
 
 import com.aquamancer.antilootruntracker.config.ModConfig;
+import com.aquamancer.antilootruntracker.moblist.MobDistanceList;
+import com.aquamancer.antilootruntracker.moblist.MobListManager;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -34,10 +30,9 @@ public class AntiLootrunTracker implements ClientModInitializer {
 
 	private static boolean inValidShard;
 	private static final Map<BlockPos, List<MobEntity>> entityCache = new HashMap<>();
-	private static MobProximityList actionBarMobList;
+	private static MobDistanceList actionBarMobList;
 
 	// tick counters for performance (don't run every tick) or timing logistics
-	private static int mobListDisableDurationTicks = 0;
 	private static int shardUpdateCounter = 0;
 	private static int entityCacheCounter = 0;
 
@@ -48,9 +43,6 @@ public class AntiLootrunTracker implements ClientModInitializer {
 		config = configHolder.getConfig();
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			if (mobListDisableDurationTicks > 0) {
-				mobListDisableDurationTicks--;
-			}
             if (shardUpdateCounter <= 0) {
                 inValidShard = Pattern.matches(config.getShardsEnabledIn(), ShardInfo.getCurrentShard());
                 shardUpdateCounter = 40;
@@ -61,7 +53,7 @@ public class AntiLootrunTracker implements ClientModInitializer {
 				entityCacheCounter = config.getEntityScanInterval();
 			}
 			entityCacheCounter--;
-			updateActionBarMobList();
+			MobListManager.onTick();
         });
 	}
 
@@ -88,56 +80,8 @@ public class AntiLootrunTracker implements ClientModInitializer {
 		}).stream().filter(LivingEntity::isAlive);
 	}
 
-	private static void updateActionBarMobList() {
-		if (!shouldRenderMobList()) return;
-
-		MinecraftClient client = MinecraftClient.getInstance();
-		if (client == null || client.world == null || client.player == null || client.cameraEntity == null) {
-			return;
-		}
-
-		// get the blockHit under the player's crosshair
-		Vec3d eyePos = client.player.getEyePos();
-		Vec3d cameraDirection = client.cameraEntity.getRotationVec(client.getTickDelta());
-		Vec3d reach = eyePos.add(cameraDirection.multiply(config.getMobListReachDistance()));
-		RaycastContext raycast = new RaycastContext(
-				eyePos,
-				reach,
-				RaycastContext.ShapeType.OUTLINE,
-				RaycastContext.FluidHandling.NONE,
-				client.cameraEntity
-		);
-
-		BlockHitResult blockHitResult = client.world.raycast(raycast);
-		BlockPos blockPos = blockHitResult.getBlockPos();
-		Block blockHit = client.world.getBlockState(blockPos).getBlock();
-
-		if (blockHit != Blocks.CHEST) {
-			return;
-		}
-
-		actionBarMobList = new MobProximityList(AntiLootrunTracker.getMobsNearby(blockPos), Vec3d.of(blockPos));
-	}
-
-	// temporarily disables action bar enumeration and rendering of mob list
-	public static void disableMobList() {
-		int ticks = config.getMobListDisableDuration();
-		if (ticks > mobListDisableDurationTicks) {
-			mobListDisableDurationTicks = ticks;
-		}
-	}
-
-	@Nullable
-	public static MobProximityList getActionBarMobList() {
-		return actionBarMobList;
-	}
-
-	private static boolean isModEnabled() {
+	public static boolean isModEnabled() {
 		return config.isModEnabled() && inValidShard;
-	}
-
-	public static boolean shouldRenderMobList() {
-		return isModEnabled() && config.isMobListEnabled() && mobListDisableDurationTicks <= 0;
 	}
 
 	public static boolean shouldRenderMobCountOnChest() {

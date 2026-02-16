@@ -1,5 +1,6 @@
-package com.aquamancer.antilootruntracker;
+package com.aquamancer.antilootruntracker.moblist;
 
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -10,10 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class MobProximityList {
+public class MobDistanceList {
     private final Map<Integer, List<MobEntity>> mobsByDistance = new HashMap<>();
 
-    public MobProximityList(Stream<MobEntity> mobs, Vec3d distanceFrom) {
+    public MobDistanceList(Stream<MobEntity> mobs, Vec3d distanceFrom) {
         mobs.forEach(mob -> {
             mobsByDistance.compute((int) Math.sqrt(mob.squaredDistanceTo(distanceFrom)),
                     (k, v) -> {

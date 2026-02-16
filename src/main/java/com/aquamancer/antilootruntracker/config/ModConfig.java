@@ -75,6 +75,8 @@ public class ModConfig implements ConfigData {
         @Tooltip
         private boolean mobListEnabled = true;
         @Tooltip
+        private int mobListUpdateInterval = 1;
+        @Tooltip
         private int mobListReachDistance = 30;
         @Tooltip
         private int mobListDisableDuration = 20;
@@ -126,6 +128,10 @@ public class ModConfig implements ConfigData {
 
     public boolean isMobListEnabled() {
         return mobListOptions.mobListEnabled;
+    }
+
+    public int getMobListUpdateInterval() {
+        return mobListOptions.mobListUpdateInterval;
     }
 
     public int getMobListDisableDuration() {
