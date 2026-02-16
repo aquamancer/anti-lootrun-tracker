@@ -6,6 +6,11 @@ If there are no mobs nearby, the chest gets colored green.
 
 This mod is compatible with Fabric 1.20.4
 
+Todo:
+* append shard to poi conquer message, maybe a message when it respawns
+* ability to recolor all chests
+* change raycast frequency
+
 ## Building
         git clone https://github.com/aquamancer/anti-lootrun-tracker
         cd anti-lootrun-tracker
