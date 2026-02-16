@@ -2,16 +2,10 @@ package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobProximityList;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -33,7 +27,7 @@ public class GameRendererMixin {
 
 		MobProximityList mobList = AntiLootrunTracker.getActionBarMobList();
 		if (mobList == null) return;
-		Text message = AntiLootrunTracker.getActionBarMobList().toText();
+		Text message = mobList.toText();
 		if (message != null) {
 			client.inGameHud.setOverlayMessage(message, false);
 		}
