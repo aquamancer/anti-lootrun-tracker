@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Holds the state of the mob list to be rendered and handles update logic.
- * Related mixin: GameRendererMixin.java
+ * Related mixin: GameRendererMixin renders the list
  */
 public class MobListManager {
     private static MobDistanceList activeList;
