@@ -11,7 +11,7 @@ import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Handles action bar mob list update logic and provides the list to be rendered.
+ * Holds the state of the mob list to be rendered, and handles update logic.
  * Related mixin: GameRendererMixin.java
  */
 public class MobListManager {
