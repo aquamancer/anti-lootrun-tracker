@@ -43,7 +43,7 @@ public class PoiRespawnTracker {
                 if (timeUntilRespawn == null) {
                     continue;
                 }
-                MutableText timer = Text.literal(poi.getKey()).append("respawning in: ").append(timeUntilRespawn);
+                MutableText timer = Text.literal(poi.getKey()).append(" respawning in: ").append(timeUntilRespawn);
                 lines.add(timer);
             }
         }
