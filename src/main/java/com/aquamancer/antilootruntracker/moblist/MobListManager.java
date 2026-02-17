@@ -57,6 +57,7 @@ public class MobListManager {
         Block blockHit = client.world.getBlockState(blockPos).getBlock();
 
         if (blockHit != Blocks.CHEST) {
+            activeList = null;
             return;
         }
 

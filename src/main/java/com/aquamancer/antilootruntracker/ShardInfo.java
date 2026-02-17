@@ -48,6 +48,10 @@ public class ShardInfo {
         }
 	}
 
+    public static String getCurrentShard() {
+        return currentShard;
+    }
+
     public static boolean inValidShard() {
         return inValidShard;
     }
