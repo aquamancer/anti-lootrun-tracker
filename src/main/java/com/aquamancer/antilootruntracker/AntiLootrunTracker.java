@@ -27,6 +27,7 @@ public class AntiLootrunTracker implements ClientModInitializer {
 			MobScanner.onTick();
 			ShardInfo.onTick();
 			MobListManager.onTick();
+			PoiRespawnTracker.onTick();
         });
 
 		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, lines) -> {
