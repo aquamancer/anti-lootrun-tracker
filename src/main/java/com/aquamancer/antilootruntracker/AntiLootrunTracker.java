@@ -2,11 +2,13 @@ package com.aquamancer.antilootruntracker;
 
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import com.aquamancer.antilootruntracker.moblist.MobListManager;
+import com.aquamancer.antilootruntracker.poirespawn.PoiRespawnTracker;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +28,10 @@ public class AntiLootrunTracker implements ClientModInitializer {
 			ShardInfo.onTick();
 			MobListManager.onTick();
         });
+
+		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, lines) -> {
+			PoiRespawnTracker.renderTimersInTooltip(itemStack, tooltipContext, lines);
+		});
 	}
 
 	public static boolean isModEnabled() {
