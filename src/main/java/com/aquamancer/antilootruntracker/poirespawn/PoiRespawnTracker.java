@@ -38,14 +38,14 @@ public class PoiRespawnTracker {
         }
         String itemName = stack.getItem().getName().getString();
         if (respawningPois.get(itemName) != null) {
-            for (Map.Entry<String, Long> poi : respawningPois.get(itemName).entrySet()) {
+            respawningPois.get(itemName).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach((poi) -> {
                 String timeUntilRespawn = getTimeUntil(poi.getValue());
                 if (timeUntilRespawn == null) {
-                    continue;
+                    return;
                 }
                 MutableText timer = Text.literal(poi.getKey()).append(" respawning in: ").append(timeUntilRespawn);
                 lines.add(timer);
-            }
+            });
         }
     }
 
