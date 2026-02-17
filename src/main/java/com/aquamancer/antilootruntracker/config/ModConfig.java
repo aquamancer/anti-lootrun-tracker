@@ -4,15 +4,10 @@ import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ColorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.annotation.ConfigEntry.Category;
-import me.shedaniel.autoconfig.annotation.ConfigEntry.BoundedDiscrete;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.ColorPicker;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.CollapsibleObject;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.Tooltip;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.Gui.TransitiveObject;
-
-import net.minecraft.util.Formatting;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +22,13 @@ public class ModConfig implements ConfigData {
     private int entityScanInterval = 4;
 
     @Tooltip
-    private boolean recolorChest = true;
+    private boolean recolorAllChests = false;
     @Tooltip
-    private ColorManager.ChestColor recolor = ColorManager.ChestColor.LIME;
+    private ColorManager.ChestColor allChestRecolor = ColorManager.ChestColor.CYAN;
+    @Tooltip
+    private boolean recolorFreeChests = true;
+    @Tooltip
+    private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIME;
 
     @Tooltip
     @CollapsibleObject
@@ -186,12 +185,20 @@ public class ModConfig implements ConfigData {
         return chestNumberOptions.chestFaces.bottomFace;
     }
 
-    public boolean recolorChest() {
-        return recolorChest;
+    public boolean recolorAllChests() {
+        return recolorAllChests;
     }
 
-    public ColorManager.ChestColor getRecolor() {
-        return recolor;
+    public ColorManager.ChestColor getAllChestRecolor() {
+        return allChestRecolor;
+    }
+
+    public boolean recolorFreeChests() {
+        return recolorFreeChests;
+    }
+
+    public ColorManager.ChestColor getFreeChestRecolor() {
+        return freeChestRecolor;
     }
 
     public List<String> getIgnoredBaseMobs() {

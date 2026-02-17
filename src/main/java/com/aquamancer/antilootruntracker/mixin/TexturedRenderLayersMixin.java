@@ -2,6 +2,7 @@ package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ColorManager;
+import com.aquamancer.antilootruntracker.MobScanner;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.enums.ChestType;
@@ -19,7 +20,7 @@ public class TexturedRenderLayersMixin {
      */
     @Inject(at = @At("HEAD"), cancellable = true, method = "getChestTextureId(Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/block/enums/ChestType;Z)Lnet/minecraft/client/util/SpriteIdentifier;")
     private static void getChestTexture(BlockEntity chest, ChestType type, boolean christmas, CallbackInfoReturnable<SpriteIdentifier> cir) {
-        if (!AntiLootrunTracker.shouldRecolorFreeChest()) {
+        if (!AntiLootrunTracker.shouldRecolorAllChests() && !AntiLootrunTracker.shouldRecolorFreeChests()) {
             return;
         }
         // if !hasWorld() then the chest is being rendered in an inventory
@@ -27,7 +28,14 @@ public class TexturedRenderLayersMixin {
             return;
         }
 
-        SpriteIdentifier sprite = ColorManager.getChestSpriteBasedOnMobs(chest, type);
+        SpriteIdentifier sprite = null;
+        long mobsNearby = MobScanner.getMobsNearby(chest.getPos()).count();
+        if (mobsNearby <= 0 && AntiLootrunTracker.shouldRecolorFreeChests()) {
+            sprite = ColorManager.getChestSprite(AntiLootrunTracker.config.getFreeChestRecolor(), type);
+        } else if (AntiLootrunTracker.shouldRecolorAllChests()) {
+            sprite = ColorManager.getChestSprite(AntiLootrunTracker.config.getAllChestRecolor(), type);
+        }
+
         if (sprite != null) {
             cir.setReturnValue(sprite);
         }

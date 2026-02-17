@@ -59,11 +59,13 @@ public class ColorManager {
     private static ChestColor getChestColor(BlockEntity chest) {
         long mobsNearby = MobScanner.getMobsNearby(chest.getPos()).count();
         if (mobsNearby == 0) {
-            return AntiLootrunTracker.config.getRecolor();
+            return AntiLootrunTracker.config.getFreeChestRecolor();
         } else {
             return ChestColor.DEFAULT;
         }
     }
 
-
+    public static SpriteIdentifier getChestSprite(ChestColor color, ChestType type) {
+        return spriteLookup.get(new AbstractMap.SimpleImmutableEntry<>(color, type));
+    }
 }
