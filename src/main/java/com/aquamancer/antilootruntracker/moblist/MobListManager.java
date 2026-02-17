@@ -1,6 +1,7 @@
 package com.aquamancer.antilootruntracker.moblist;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.MobScanner;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -59,7 +60,7 @@ public class MobListManager {
             return;
         }
 
-        activeList = new MobDistanceList(AntiLootrunTracker.getMobsNearby(blockPos), Vec3d.of(blockPos));
+        activeList = new MobDistanceList(MobScanner.getMobsNearby(blockPos), Vec3d.of(blockPos));
     }
 
     public static void disableMobListTemporarily() {

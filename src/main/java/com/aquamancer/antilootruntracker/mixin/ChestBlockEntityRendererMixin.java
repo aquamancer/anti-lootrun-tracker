@@ -1,6 +1,7 @@
 package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.MobScanner;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -39,7 +40,7 @@ public class ChestBlockEntityRendererMixin {
             return;
         }
         BlockPos chestPos = chest.getPos();
-        long mobsNearby = Math.min(AntiLootrunTracker.getMobsNearby(chestPos).count(), 9);  // # of mobs nearby, limit 1 digit
+        long mobsNearby = Math.min(MobScanner.getMobsNearby(chestPos).count(), 9);  // # of mobs nearby, limit 1 digit
         if (mobsNearby == 0) {
             return;
         }

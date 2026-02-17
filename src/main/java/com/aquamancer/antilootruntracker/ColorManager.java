@@ -57,7 +57,7 @@ public class ColorManager {
     }
 
     private static ChestColor getChestColor(BlockEntity chest) {
-        long mobsNearby = AntiLootrunTracker.getMobsNearby(chest.getPos()).count();
+        long mobsNearby = MobScanner.getMobsNearby(chest.getPos()).count();
         if (mobsNearby == 0) {
             return AntiLootrunTracker.config.getRecolor();
         } else {
