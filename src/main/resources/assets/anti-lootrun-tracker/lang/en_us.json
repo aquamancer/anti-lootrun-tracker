@@ -20,6 +20,8 @@
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.@Tooltip": "Render mob list in the action bar when\nlooking directly at a chest",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListEnabled": "Enabled",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListEnabled.@Tooltip": "Disable the mob list",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListUpdateInterval": "Mob List Update Interval (ticks)",
+  "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListUpdateInterval.@Tooltip": "How often (every n ticks, 1s = 20 ticks) to determine what block the player\nis looking at and sort mobs by distance. Values less than 2 scan and sort on every tick.",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListReachDistance": "Mob List Reach Distance (blocks)",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListReachDistance.@Tooltip": "Furthest distance (in blocks) the player\ncan be from a chest to render mob list",
   "text.autoconfig.anti-lootrun-tracker.option.mobListOptions.mobListDisableDuration": "Mob List Disable Duration (ticks)",
