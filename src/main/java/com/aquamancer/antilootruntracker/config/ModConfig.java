@@ -22,13 +22,13 @@ public class ModConfig implements ConfigData {
     private int entityScanInterval = 4;
 
     @Tooltip
+    private boolean recolorFreeChests = true;
+    @Tooltip
+    private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIGHT_BLUE;
+    @Tooltip
     private boolean recolorAllChests = false;
     @Tooltip
     private ColorManager.ChestColor allChestRecolor = ColorManager.ChestColor.CYAN;
-    @Tooltip
-    private boolean recolorFreeChests = true;
-    @Tooltip
-    private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIME;
 
     @Tooltip
     @CollapsibleObject
