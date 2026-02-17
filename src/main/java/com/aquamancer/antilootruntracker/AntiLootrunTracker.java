@@ -31,7 +31,7 @@ public class AntiLootrunTracker implements ClientModInitializer {
         });
 
 		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, lines) -> {
-			PoiRespawnTracker.renderTimersInTooltip(itemStack, tooltipContext, lines);
+			PoiRespawnTracker.renderTimersInTooltip(itemStack, lines);
 		});
 	}
 

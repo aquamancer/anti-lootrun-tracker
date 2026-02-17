@@ -32,7 +32,7 @@ public class PoiRespawnTracker {
         }
     }
 
-    public static void renderTimersInTooltip(ItemStack stack, TooltipContext context, List<Text> lines) {
+    public static void renderTimersInTooltip(ItemStack stack, List<Text> lines) {
         if (stack == null || lines == null) {
             return;
         }
