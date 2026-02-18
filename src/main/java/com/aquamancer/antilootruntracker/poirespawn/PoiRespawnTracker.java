@@ -1,13 +1,12 @@
 package com.aquamancer.antilootruntracker.poirespawn;
 
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -19,6 +18,15 @@ public class PoiRespawnTracker {
     private static int ticksUntilCleanup = 0;
     // key is shard
     private static final Map<String, Map<String, Long>> respawningPois = new HashMap<>();
+
+    static {
+        addPoi("Charn", 2, "isles");
+        addPoi("Whitecliffe", 3, "isles");
+        addPoi("Silver Tower", 1, "isles");
+        addPoi("Charn", 2, "isles");
+        addPoi("Magmortic", 1, "isles");
+        addPoi("Magmortic", 2, "isles-2");
+    }
 
     public static void addPoi(String name, int respawnInMinutes, String shard) {
         respawningPois.computeIfAbsent(shard, k -> new HashMap<>()).put(name, System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
@@ -33,22 +41,28 @@ public class PoiRespawnTracker {
     }
 
     public static void renderTimersInTooltip(ItemStack stack, List<Text> lines) {
-        if (stack == null || lines == null) {
+        if (!AntiLootrunTracker.config.showRespawningPoisInShardSelector()) {
             return;
         }
-        String itemName = stack.getItem().getName().getString();
-        if (respawningPois.get(itemName) != null) {
-            respawningPois.get(itemName).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach((poi) -> {
-                String timeUntilRespawn = getTimeUntil(poi.getValue());
-                if (timeUntilRespawn == null) {
-                    return;
-                }
-                MutableText timer = Text.literal(poi.getKey()).append(" respawning in: ").append(timeUntilRespawn);
-                lines.add(timer);
-            });
+        if (stack == null || lines == null || lines.isEmpty()) {
+            return;
+        }
+        String itemName = lines.get(0).getString();
+        Map<String, Long> pois = respawningPois.get(itemName);
+        if (pois != null && !pois.isEmpty()) {
+            lines.add(Text.empty());  // add blank line to separate
+            pois.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach((poi) -> {
+                        String timeUntilRespawn = getTimeUntil(poi.getValue());
+                        MutableText timer = Text.literal(poi.getKey()).append(": ").formatted(Formatting.GOLD);
+                        timer.append(Text.literal(timeUntilRespawn).formatted(Formatting.BLUE));
+                        lines.add(timer);
+                    });
         }
     }
 
+    // this should be safe assuming ClientTickEvents and ItemTooltipCallback run on the same thread
     private static void removeRespawnedPois() {
         Iterator<Map.Entry<String, Map<String, Long>>> shardIterator = respawningPois.entrySet().iterator();
         while (shardIterator.hasNext()) {
@@ -68,24 +82,23 @@ public class PoiRespawnTracker {
     }
 
     private static void onPoiRespawned(String name, String shard) {
+        if (!AntiLootrunTracker.config.displayPoiRespawnMessage()) {
+            return;
+        }
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null) {
             return;
         }
 
-        MutableText message = Text.literal(name).formatted(Formatting.GOLD, Formatting.BOLD);
-        message.append(Text.literal(" has respawned in ").formatted(Formatting.GOLD));
+        MutableText message = Text.empty();
+        message.append(Text.literal(name).formatted(Formatting.GOLD, Formatting.BOLD));
+        message.append(Text.literal(" has respawned in "));
         message.append(Text.literal(shard).formatted(Formatting.AQUA, Formatting.ITALIC));
         player.sendMessage(message);
     }
 
-    @Nullable
     private static String getTimeUntil(long systemMillis) {
         long untilMillis = systemMillis - System.currentTimeMillis();
-        if (untilMillis <= 0) {
-            return null;
-        }
-
         long minutes = untilMillis / 60000;
         long seconds = (untilMillis % 60000) / 1000;
         String result = "";

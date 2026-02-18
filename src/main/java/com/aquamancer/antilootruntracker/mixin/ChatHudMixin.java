@@ -45,6 +45,9 @@ public class ChatHudMixin {
             AntiLootrunTracker.LOGGER.error("Parsing conquer message failed", ex);
         }
 
+        if (!AntiLootrunTracker.config.appendShardToConquerMessage()) {
+            return message;
+        }
         MutableText newMessage = message.copy();
         MutableText appendMessage = Text.literal(" (").append(ShardInfo.getCurrentShard()).append(")").formatted(Formatting.ITALIC, Formatting.AQUA);
         newMessage.append(appendMessage);

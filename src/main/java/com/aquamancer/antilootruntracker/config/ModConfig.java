@@ -38,6 +38,9 @@ public class ModConfig implements ConfigData {
     @CollapsibleObject
     ChestNumberOptions chestNumberOptions = new ChestNumberOptions();
 
+    @CollapsibleObject
+    PoiRespawnOptions poiRespawnOptions = new PoiRespawnOptions();
+
     @Tooltip
     private List<String> ignoredBaseMobs = new ArrayList<>() {{
         add("minecraft:villager");
@@ -93,7 +96,6 @@ public class ModConfig implements ConfigData {
         }
     }
 
-
     private static class ChestNumberOptions {
         @Tooltip
         private boolean renderNumber = true;
@@ -113,6 +115,14 @@ public class ModConfig implements ConfigData {
         private boolean bottomFace = false;
     }
 
+    private static class PoiRespawnOptions {
+        private boolean appendShard = true;
+        @Tooltip
+        private boolean sendPoiRespawnMessage = true;
+        @Tooltip
+        private boolean showRespawningInShardSelector = true;
+    }
+
     public boolean isModEnabled() {
         return modEnabled;
     }
@@ -125,6 +135,21 @@ public class ModConfig implements ConfigData {
         return entityScanInterval;
     }
 
+    public boolean recolorAllChests() {
+        return recolorAllChests;
+    }
+
+    public ColorManager.ChestColor getAllChestRecolor() {
+        return allChestRecolor;
+    }
+
+    public boolean recolorFreeChests() {
+        return recolorFreeChests;
+    }
+
+    public ColorManager.ChestColor getFreeChestRecolor() {
+        return freeChestRecolor;
+    }
     public boolean isMobListEnabled() {
         return mobListOptions.mobListEnabled;
     }
@@ -185,20 +210,16 @@ public class ModConfig implements ConfigData {
         return chestNumberOptions.chestFaces.bottomFace;
     }
 
-    public boolean recolorAllChests() {
-        return recolorAllChests;
+    public boolean appendShardToConquerMessage() {
+        return poiRespawnOptions.appendShard;
     }
 
-    public ColorManager.ChestColor getAllChestRecolor() {
-        return allChestRecolor;
+    public boolean displayPoiRespawnMessage() {
+        return poiRespawnOptions.sendPoiRespawnMessage;
     }
 
-    public boolean recolorFreeChests() {
-        return recolorFreeChests;
-    }
-
-    public ColorManager.ChestColor getFreeChestRecolor() {
-        return freeChestRecolor;
+    public boolean showRespawningPoisInShardSelector() {
+        return poiRespawnOptions.showRespawningInShardSelector;
     }
 
     public List<String> getIgnoredBaseMobs() {
