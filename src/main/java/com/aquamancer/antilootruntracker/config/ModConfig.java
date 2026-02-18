@@ -22,21 +22,15 @@ public class ModConfig implements ConfigData {
     private int entityScanInterval = 4;
 
     @Tooltip
-    private boolean recolorFreeChests = true;
-    @Tooltip
-    private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIGHT_BLUE;
-    @Tooltip
-    private boolean recolorAllChests = false;
-    @Tooltip
-    private ColorManager.ChestColor allChestRecolor = ColorManager.ChestColor.CYAN;
-
-    @Tooltip
     @CollapsibleObject
     MobListOptions mobListOptions = new MobListOptions();
 
     @Tooltip
     @CollapsibleObject
     ChestNumberOptions chestNumberOptions = new ChestNumberOptions();
+
+    @CollapsibleObject
+    ChestRecolorOptions chestRecolorOptions = new ChestRecolorOptions();
 
     @CollapsibleObject
     PoiRespawnOptions poiRespawnOptions = new PoiRespawnOptions();
@@ -115,6 +109,19 @@ public class ModConfig implements ConfigData {
         private boolean bottomFace = false;
     }
 
+    private static class ChestRecolorOptions {
+        @Tooltip
+        private boolean recolorFreeChests = true;
+        @Tooltip
+        private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIGHT_BLUE;
+        @Tooltip
+        private boolean recolorAllChests = false;
+        @Tooltip
+        private ColorManager.ChestColor allChestRecolor = ColorManager.ChestColor.CYAN;
+        @Tooltip
+        private boolean shouldIgnoreShardFilter = true;
+    }
+
     private static class PoiRespawnOptions {
         private boolean appendShard = true;
         @Tooltip
@@ -136,20 +143,25 @@ public class ModConfig implements ConfigData {
     }
 
     public boolean recolorAllChests() {
-        return recolorAllChests;
+        return chestRecolorOptions.recolorAllChests;
     }
 
     public ColorManager.ChestColor getAllChestRecolor() {
-        return allChestRecolor;
+        return chestRecolorOptions.allChestRecolor;
     }
 
     public boolean recolorFreeChests() {
-        return recolorFreeChests;
+        return chestRecolorOptions.recolorFreeChests;
     }
 
     public ColorManager.ChestColor getFreeChestRecolor() {
-        return freeChestRecolor;
+        return chestRecolorOptions.freeChestRecolor;
     }
+
+    public boolean shouldAllChestRecolorIgnoreShard() {
+        return chestRecolorOptions.shouldIgnoreShardFilter;
+    }
+
     public boolean isMobListEnabled() {
         return mobListOptions.mobListEnabled;
     }

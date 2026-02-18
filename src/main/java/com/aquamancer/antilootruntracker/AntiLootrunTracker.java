@@ -46,7 +46,11 @@ public class AntiLootrunTracker implements ClientModInitializer {
 	}
 
 	public static boolean shouldRecolorAllChests() {
-		return isModEnabled() && config.recolorAllChests();
+		if (config.shouldAllChestRecolorIgnoreShard()) {
+			return config.isModEnabled() && config.recolorAllChests();
+		} else {
+			return isModEnabled() && config.recolorAllChests();
+		}
 	}
 
 	public static boolean shouldRecolorFreeChests() {
