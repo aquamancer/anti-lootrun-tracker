@@ -8,6 +8,7 @@
   "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval": "Entity Scan Interval (ticks)",
   "text.autoconfig.anti-lootrun-tracker.option.entityScanInterval.@Tooltip": "How often to re-scan mobs near each chest (every n ticks, 1s = 20 ticks).\nValues less than 2 scan on every tick.\nLower values increase responsiveness of mobs entering/leaving the range of a chest\nat a very minor cost of game performance.\nMobs around newly-rendered chests are immediately scanned regardless of this value.",
 
+  "text.autoconfig.anti-lootrun-tracker.option.chestRecolorOptions": "Chest Recolor Options",
   "text.autoconfig.anti-lootrun-tracker.option.chestRecolorOptions.recolorFreeChests": "Recolor Free Chests",
   "text.autoconfig.anti-lootrun-tracker.option.chestRecolorOptions.recolorFreeChests.@Tooltip": "Change the color of chests with no nearby mobs",
   "text.autoconfig.anti-lootrun-tracker.option.chestRecolorOptions.freeChestRecolor": "Free Chest Color",
@@ -52,7 +53,7 @@
   "text.autoconfig.anti-lootrun-tracker.option.chestNumberOptions.chestFaces.bottomFace": "Bottom Face",
 
   "text.autoconfig.anti-lootrun-tracker.option.poiRespawnOptions": "Respawning POI Options",
-  "text.autoconfig.anti-lootrun-tracker.option.poiRespawnOptions.appendShard": "Append shard name to POI Conquer Message",
+  "text.autoconfig.anti-lootrun-tracker.option.poiRespawnOptions.appendShard": "Append Shard Name to POI Conquer Message",
   "text.autoconfig.anti-lootrun-tracker.option.poiRespawnOptions.sendPoiRespawnMessage": "Display POI Respawn Message",
   "text.autoconfig.anti-lootrun-tracker.option.poiRespawnOptions.sendPoiRespawnMessage.@Tooltip": "Display a message in chat when a POI respawns",
   "text.autoconfig.anti-lootrun-tracker.option.poiRespawnOptions.showRespawningInShardSelector": "Show Respawning POIs in Shard Selector",

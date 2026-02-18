@@ -113,7 +113,7 @@ public class ModConfig implements ConfigData {
         @Tooltip
         private boolean recolorFreeChests = true;
         @Tooltip
-        private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIGHT_BLUE;
+        private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIME;
         @Tooltip
         private boolean recolorAllChests = false;
         @Tooltip
