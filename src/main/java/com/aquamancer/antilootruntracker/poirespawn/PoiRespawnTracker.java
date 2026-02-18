@@ -16,19 +16,14 @@ import java.util.Map;
 public class PoiRespawnTracker {
     private static final int CLEANUP_INTERVAL_TICKS = 20;
     private static int ticksUntilCleanup = 0;
-    // key is shard
+    // Map<shard, <poi name, system respawn time>>
     private static final Map<String, Map<String, Long>> respawningPois = new HashMap<>();
 
-    static {
-        addPoi("Charn", 2, "isles");
-        addPoi("Whitecliffe", 3, "isles");
-        addPoi("Silver Tower", 1, "isles");
-        addPoi("Charn", 2, "isles");
-        addPoi("Magmortic", 1, "isles");
-        addPoi("Magmortic", 2, "isles-2");
-    }
-
     public static void addPoi(String name, int respawnInMinutes, String shard) {
+        if (respawningPois.values().stream().mapToInt(Map::size).sum() > 100) {
+            // prevent abuse
+            return;
+        }
         respawningPois.computeIfAbsent(shard, k -> new HashMap<>()).put(name, System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
     }
 
