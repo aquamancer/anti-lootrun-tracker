@@ -33,9 +33,6 @@ public class MobScanner {
             return Stream.of();
         }
 
-        // only return values in the cache, except for newly rendered chests.
-        // onInitializeClient() will clear the cache every n ticks, specified by the config
-        // which effectively updates the cache
         return entityCache.computeIfAbsent(pos, (v) -> {
             return client.world.getEntitiesByClass(
                     MobEntity.class,

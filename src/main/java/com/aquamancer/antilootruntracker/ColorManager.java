@@ -44,27 +44,7 @@ public class ColorManager {
         return new SpriteIdentifier(CHEST_ATLAS_TEXTURE, new Identifier(AntiLootrunTracker.MOD_ID, "entity/chest/" + variant));
     }
 
-    /**
-     * Returns a Chest texture based on how many mobs are near the chest.
-     * @param chest the chest to check mobs in its surroundings
-     * @param type the type of chest
-     * @return a chest texture based on how many mobs are near the chest, null if the default Chest texture should be used
-     */
     @Nullable
-    public static SpriteIdentifier getChestSpriteBasedOnMobs(BlockEntity chest, ChestType type) {
-        ChestColor color = getChestColor(chest);
-        return spriteLookup.get(new AbstractMap.SimpleImmutableEntry<>(color, type));
-    }
-
-    private static ChestColor getChestColor(BlockEntity chest) {
-        long mobsNearby = MobScanner.getMobsNearby(chest.getPos()).count();
-        if (mobsNearby == 0) {
-            return AntiLootrunTracker.config.getFreeChestRecolor();
-        } else {
-            return ChestColor.DEFAULT;
-        }
-    }
-
     public static SpriteIdentifier getChestSprite(ChestColor color, ChestType type) {
         return spriteLookup.get(new AbstractMap.SimpleImmutableEntry<>(color, type));
     }

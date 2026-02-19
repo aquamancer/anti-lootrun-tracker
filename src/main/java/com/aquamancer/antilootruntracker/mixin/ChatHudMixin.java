@@ -2,7 +2,7 @@ package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ShardInfo;
-import com.aquamancer.antilootruntracker.poirespawn.PoiRespawnTracker;
+import com.aquamancer.antilootruntracker.PoiRespawnTracker;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;

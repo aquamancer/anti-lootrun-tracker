@@ -2,7 +2,6 @@ package com.aquamancer.antilootruntracker;
 
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import com.aquamancer.antilootruntracker.moblist.MobListManager;
-import com.aquamancer.antilootruntracker.poirespawn.PoiRespawnTracker;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;

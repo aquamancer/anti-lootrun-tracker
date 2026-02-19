@@ -1,6 +1,5 @@
-package com.aquamancer.antilootruntracker.poirespawn;
+package com.aquamancer.antilootruntracker;
 
-import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
