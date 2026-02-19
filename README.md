@@ -1,13 +1,50 @@
-# Anti-Lootrun Tracker (specifically made for Monumenta)
+# Monumenta Lootrun Utils
+Monumenta mod that helps lootrunners optimize routes in areas with lootrun protection. Made for Fabric 1.20.4.
 
-Displays the number of mobs in a 12-block radius around a chest.
+#### Terminology
+*Mob Points*: Players' score that increases after killing mobs, and decreases after looting a non-free chest
+<br>*Free chest*: chests that do not have any nearby mobs, allowing the chest be looted without costing *mob points*
+<br>*Nearby mobs*: mobs close enough to the chest to make it cost mob points when looting
 
-If there are no mobs nearby, the chest gets colored green.
+<details>
+<summary>Important: How does Monumenta's lootrun protection work?</summary>
 
-This mod is compatible with Fabric 1.20.4
+## Monumenta's Anti-Lootrun Mechanics
+Monumenta uses a point-based system to prevent looting chests without engaging mobs or spawners.
 
-Todo:
-* append shard to poi conquer message, maybe a message when it respawns
+#### Point System
+* Killing a regular/elite/boss mob grants 1/3/5 *mob points*
+* Mining a spawner grants 1 spawner point
+* Players can hold up to `4 * <points required to loot a chest>` points at once
+
+#### Looting a Chest
+* If there are **no mobs** within `12` blocks of the chest:
+  * The chest **is lootable regardless of players' points**, and **no mob points will be deducted from any player**
+  * This mod refers to these chests as *free*
+* If there is at least **1** mob within `12` blocks **of the chest** (box-shaped search area):
+  * If players within `20` blocks (sphere-shaped search area) of the chest have at least `?` *mob points combined:*
+    * The chest **is lootable** and **removes `?` total *mob points* from the group**, prioritizing the looter, then by distance to the chest
+  * Otherwise, the chest **is not lootable** (blocked)
+  * This mod refers to these mobs as *nearby mobs*
+
+Spawner points follow the same mechanic, but likely with a different amount of points required to loot the chest.
+
+</details>
+
+This mod focuses on the *mob points* mechanic, since it's nearly impossible to be unable to loot a chest due to *spawner points* deficiency when conquering POI's.
+
+* Players can quickly identify **free chests** (no mobs within `12` blocks of the chest), and no *mob points* will be deducted when looting.
+* Players can optimize lootrun routes and pathing to encounter as many *free chests* as possible
+* Decide whether to kill nearby mobs before looting a chest if only a few mobs prevent the chest from being *free.*
+
+### Main Features
+* Change the color of free chests
+* When looking at a chest, list nearby mobs' distance from it in the player's action bar
+* Render the number of nearby mobs on the chest
+* Append the shard name to POI conquer messages
+* Show respawning POIs' time until respawn in tooltips of the shard/"Overworld Instance" selector NPC
+
+*All features of this mod are configurable and can be turned off*
 
 ## Building
         git clone https://github.com/aquamancer/anti-lootrun-tracker
@@ -15,34 +52,6 @@ Todo:
         ./gradlew build
 
 Output .jar is located at `build/libs/anti-lootrun-tracker-1.0.0.jar`
-
-## Monumenta's Anti-Lootrun Mechanics
-
-Monumenta uses a point-based system to prevent looting chests without engaging mobs or spawners.
-
-#### Point System
-
-* Killing a regular/elite/boss mob grants 1/3/5 *mob points*, respectively
-* Mining a spawner grants 1 spawner point
-* Players can hold up to `4 * <points required to loot a chest>` points at once
-
-#### Looting a Chest
-* If there is at least **1** mob within `12` blocks **of the chest** (box-shaped search area):
-  * If players within `20` blocks (sphere-shaped search area) of the chest have at least `?` *mob points combined:*
-    * The chest **is lootable** and **removes `?` total *mob points* from the group**, prioritizing the looter, then by distance to the chest
-  * Otherwise, the chest **is not lootable**
-* If there are **no mobs** within `12` blocks of the chest:
-  * The chest **is lootable regardless of players' points**, and **no mob points will be deducted from any player**
-
-Spawner points follow the same mechanic, but likely with a different amount of points required to loot the chest.
-
-## Why this mod helps
-
-This mod focuses on the *mob points* mechanic, since it's nearly impossible to be unable to loot a chest due to *spawner points* deficiency when conquering POI's.
-
-* Players can quickly identify **free chests** (no mobs within `12` blocks of the chest), and no *mob points* will be deducted when looting!
-* Players can optimize lootrun routes to encounter as many *free chests* as possible 
-* Decide whether to fight nearby mobs before looting a chest if only a few mobs prevent the chest from being *free.*
 
 ## Screenshots
 
