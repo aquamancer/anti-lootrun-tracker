@@ -2,7 +2,7 @@
 Monumenta mod that helps lootrunners optimize routes in areas with lootrun protection. Made for Fabric 1.20.4.
 
 #### Terminology
-*Mob Points*: Players' score that increases after killing mobs, and decreases after looting a non-free chest
+*Mob Points*: Players' score that increases after killing mobs, and decreases after looting a chest with at least 1 nearby mob
 <br>*Free chest*: chests that do not have any nearby mobs, allowing the chest be looted without costing *mob points*
 <br>*Nearby mobs*: mobs close enough to the chest to make it cost mob points when looting
 
@@ -31,18 +31,19 @@ Spawner points follow the same mechanic, but likely with a different amount of p
 
 </details>
 
-This mod focuses on the *mob points* mechanic, since it's nearly impossible to be unable to loot a chest due to *spawner points* deficiency when conquering POI's.
+This mod focuses on the *mob points* mechanic, since it is very rare to be unable to loot a chest due to *spawner points* deficiency when conquering POIs.
 
 * Players can quickly identify **free chests** (no mobs within `12` blocks of the chest), and no *mob points* will be deducted when looting.
 * Players can optimize lootrun routes and pathing to encounter as many *free chests* as possible
 * Decide whether to kill nearby mobs before looting a chest if only a few mobs prevent the chest from being *free.*
 
 ### Main Features
-* Change the color of free chests
+* Change the texture color of free chests
 * When looking at a chest, list nearby mobs' distance from it in the player's action bar
 * Render the number of nearby mobs on the chest
 * Append the shard name to POI conquer messages
 * Show respawning POIs' time until respawn in tooltips of the shard/"Overworld Instance" selector NPC
+* Full feature list can be found at `src/main/resources/assets/anti-lootrun-tracker/lang/en_us.json` or `src/main/java/com/aquamancer/antilootruntracker/config/ModConfig.java`
 
 *All features of this mod are configurable and can be turned off*
 
