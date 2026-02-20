@@ -1,7 +1,7 @@
 package com.aquamancer.antilootruntracker.config;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
-import com.aquamancer.antilootruntracker.ColorManager;
+import com.aquamancer.antilootruntracker.RecolorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.ColorPicker;
@@ -113,11 +113,11 @@ public class ModConfig implements ConfigData {
         @Tooltip
         private boolean recolorFreeChests = true;
         @Tooltip
-        private ColorManager.ChestColor freeChestRecolor = ColorManager.ChestColor.LIME;
+        private RecolorManager.ChestColor freeChestRecolor = RecolorManager.ChestColor.LIME;
         @Tooltip
         private boolean recolorAllChests = false;
         @Tooltip
-        private ColorManager.ChestColor allChestRecolor = ColorManager.ChestColor.CYAN;
+        private RecolorManager.ChestColor allChestRecolor = RecolorManager.ChestColor.CYAN;
         @Tooltip
         private boolean shouldIgnoreShardFilter = true;
     }
@@ -146,7 +146,7 @@ public class ModConfig implements ConfigData {
         return chestRecolorOptions.recolorAllChests;
     }
 
-    public ColorManager.ChestColor getAllChestRecolor() {
+    public RecolorManager.ChestColor getAllChestRecolor() {
         return chestRecolorOptions.allChestRecolor;
     }
 
@@ -154,7 +154,7 @@ public class ModConfig implements ConfigData {
         return chestRecolorOptions.recolorFreeChests;
     }
 
-    public ColorManager.ChestColor getFreeChestRecolor() {
+    public RecolorManager.ChestColor getFreeChestRecolor() {
         return chestRecolorOptions.freeChestRecolor;
     }
 

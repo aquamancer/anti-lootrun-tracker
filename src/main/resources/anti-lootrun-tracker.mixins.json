@@ -7,7 +7,7 @@
     "TexturedRenderLayersMixin",
     "ClientPlayNetworkHandlerMixin",
     "ChestBlockEntityRendererMixin",
-    "TabHudAccessor",
+    "PlayerListHudMixin",
     "ChatHudMixin"
   ],
   "injectors": {

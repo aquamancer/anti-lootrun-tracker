@@ -3,6 +3,7 @@ package com.aquamancer.antilootruntracker.mixin;
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.ShardInfo;
 import com.aquamancer.antilootruntracker.PoiRespawnTracker;
+import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Style;
@@ -20,6 +21,9 @@ public class ChatHudMixin {
     private static final int FORMATTING_GOLD_COLOR = 16755200;
     private static final Pattern CONQUER_REGEX = Pattern.compile("(?<poi>.+) has been conquered! It will respawn in (?<minutes>\\d+) minutes.*");
 
+    /**
+     * Appends shard name to POI conquer messages.
+     */
     @ModifyVariable(at = @At("LOAD"), method = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;)V", name="message", ordinal=0, argsOnly = true)
     public Text addMessage(Text message) {
         if (message == null) {
@@ -45,12 +49,17 @@ public class ChatHudMixin {
             AntiLootrunTracker.LOGGER.error("Parsing conquer message failed", ex);
         }
 
-        if (!AntiLootrunTracker.config.appendShardToConquerMessage()) {
+        if (!isEnabled()) {
             return message;
         }
         MutableText newMessage = message.copy();
         MutableText appendMessage = Text.literal(" (").append(ShardInfo.getCurrentShard()).append(")").formatted(Formatting.ITALIC, Formatting.AQUA);
         newMessage.append(appendMessage);
         return newMessage;
+    }
+
+    private static boolean isEnabled() {
+        ModConfig config = AntiLootrunTracker.config;
+        return config.isModEnabled() && config.appendShardToConquerMessage();
     }
 }

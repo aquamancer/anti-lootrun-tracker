@@ -11,11 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
     /**
-     * Temporarily disables the mob list action bar rendering so the player can see the server's
-     * "chest is locked" message
+     * Prevents mob list from completely blocking out other action bar messages
      */
     @Inject(at = @At("HEAD"), method = "onOverlayMessage")
     public void onOverlayMessage(OverlayMessageS2CPacket packet, CallbackInfo ci) {
-        MobListManager.disableMobListTemporarily();  // temporarily disable mob list
+        MobListManager.disableMobListTemporarily();
     }
 }

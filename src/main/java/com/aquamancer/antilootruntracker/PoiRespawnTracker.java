@@ -12,6 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Data structure representing respawning POIs and also renders the tooltips
+ */
 public class PoiRespawnTracker {
     private static final int CLEANUP_INTERVAL_TICKS = 20;
     private static int ticksUntilCleanup = 0;

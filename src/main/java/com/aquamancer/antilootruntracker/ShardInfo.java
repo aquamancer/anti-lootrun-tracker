@@ -1,6 +1,6 @@
 package com.aquamancer.antilootruntracker;
 
-import com.aquamancer.antilootruntracker.mixin.TabHudAccessor;
+import com.aquamancer.antilootruntracker.mixin.PlayerListHudMixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Holds the state of the current player's shard and handles update logic.
+ * Holds the state of the player's current shard and handles update logic.
  */
 public class ShardInfo {
     private static final Pattern shardRegex = Pattern.compile(".*<(?<shard>[-\\w\\d]*)>.*");
@@ -33,7 +33,7 @@ public class ShardInfo {
             return;
         }
 
-		Text headerText = ((TabHudAccessor) client.inGameHud.getPlayerListHud()).getHeader();
+		Text headerText = ((PlayerListHudMixin) client.inGameHud.getPlayerListHud()).getHeader();
         if (headerText == null) {
             currentShard = "";
             return;

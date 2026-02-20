@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+/**
+ * Provides and caches lists of mobs nearby a block
+ */
 public class MobScanner {
     public static final int MOB_SEARCH_RADIUS = 12;
 

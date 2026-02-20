@@ -33,24 +33,4 @@ public class AntiLootrunTracker implements ClientModInitializer {
 			PoiRespawnTracker.renderTimersInTooltip(itemStack, lines);
 		});
 	}
-
-	public static boolean isModEnabled() {
-		return config.isModEnabled() && ShardInfo.inValidShard();
-	}
-
-	public static boolean shouldRenderMobCountOnChest() {
-		return isModEnabled() && config.renderNumber();
-	}
-
-	public static boolean shouldRecolorAllChests() {
-		if (config.shouldAllChestRecolorIgnoreShard()) {
-			return config.isModEnabled() && config.recolorAllChests();
-		} else {
-			return isModEnabled() && config.recolorAllChests();
-		}
-	}
-
-	public static boolean shouldRecolorFreeChests() {
-		return isModEnabled() && config.recolorFreeChests();
-	}
 }

@@ -2,6 +2,8 @@ package com.aquamancer.antilootruntracker.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobScanner;
+import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,12 +27,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChestBlockEntityRenderer.class)
 public class ChestBlockEntityRendererMixin {
     /**
-     * Draws a number on the top and front face of chests, indicating how many mobs are near it.
+     * Draws a number on faces of chests, indicating how many mobs are near it.
      */
     @Inject(at = @At("TAIL"), method = "render(Lnet/minecraft/block/entity/BlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V")
     public void render(BlockEntity chest, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, CallbackInfo ci) {
         // if !hasWorld() then the chest is being rendered in an inventory
-        if (!AntiLootrunTracker.shouldRenderMobCountOnChest() || !(chest instanceof ChestBlockEntity) || !chest.hasWorld()) {
+        if (!isEnabled() || !(chest instanceof ChestBlockEntity) || !chest.hasWorld()) {
             return;
         }
 
@@ -224,5 +226,11 @@ public class ChestBlockEntityRendererMixin {
                 0xF000F0  // max lighting
         );
         matrices.pop();
+    }
+
+    @Unique
+    private static boolean isEnabled() {
+        ModConfig config = AntiLootrunTracker.config;
+        return config.isModEnabled() && ShardInfo.inValidShard() && config.renderNumber();
     }
 }

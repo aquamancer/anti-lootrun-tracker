@@ -1,6 +1,5 @@
 package com.aquamancer.antilootruntracker;
 
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;
@@ -12,10 +11,10 @@ import java.util.Map;
 
 import static net.minecraft.client.render.TexturedRenderLayers.CHEST_ATLAS_TEXTURE;
 
-public class ColorManager {
-    /**
-     * Supported chest colors.
-     */
+/**
+ * Loads and provides recolored Chest textures
+ */
+public class RecolorManager {
     // made public so ModConfig can access it
     public enum ChestColor {
         DEFAULT, WHITE, LIGHT_GRAY, GRAY, BLACK, BROWN, RED, ORANGE, YELLOW, LIME, GREEN, CYAN, LIGHT_BLUE, BLUE, PURPLE, MAGENTA, PINK

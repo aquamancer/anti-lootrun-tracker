@@ -2,6 +2,8 @@ package com.aquamancer.antilootruntracker.moblist;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobScanner;
+import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
@@ -13,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Holds the state of the mob list to be rendered and handles update logic.
- * Related mixin: GameRendererMixin renders the list
+ * Related mixins: GameRenderer renders the list, ClientPlayNetworkHandler disables the list temporarily
  */
 public class MobListManager {
     private static MobDistanceList activeList;
@@ -77,6 +79,7 @@ public class MobListManager {
     }
 
     public static boolean shouldRenderMobList() {
-        return AntiLootrunTracker.isModEnabled() && AntiLootrunTracker.config.isMobListEnabled() && disabledDuration <= 0;
+        ModConfig config = AntiLootrunTracker.config;
+        return config.isModEnabled() && ShardInfo.inValidShard() && config.isMobListEnabled() && disabledDuration <= 0;
     }
 }
