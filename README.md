@@ -1,7 +1,7 @@
 # Monumenta Lootrun Utils
 Monumenta mod that helps lootrunners optimize routes in areas with lootrun protection and track respawning POIs. Made for Fabric 1.20.4.
 
-#### Terminology
+### Terminology
 *Mob Points*: Players' score that increases after killing mobs, and decreases after looting a chest with at least 1 nearby mob
 
 *Free chest*: chests that do not have any nearby mobs, allowing the chest be looted without costing *mob points*
