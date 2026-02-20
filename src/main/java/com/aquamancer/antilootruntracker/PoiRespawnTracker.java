@@ -26,7 +26,9 @@ public class PoiRespawnTracker {
             // prevent abuse
             return;
         }
-        respawningPois.computeIfAbsent(shard, k -> new HashMap<>()).put(name, System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
+        // when changing shards, monumenta resends all recent chat messages, so we don't replace existing pois respawn time
+        respawningPois.computeIfAbsent(shard, s -> new HashMap<>())
+                .computeIfAbsent(name, n -> System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
     }
 
     public static void onTick() {

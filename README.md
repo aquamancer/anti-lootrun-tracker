@@ -50,6 +50,8 @@ This mod focuses on the *mob points* mechanic, since it is very rare to be unabl
         cd anti-lootrun-tracker
         ./gradlew build
 
+Or `gradlew.bat build` on Windows
+
 Output .jar is located at `build/libs/anti-lootrun-tracker-1.0.0.jar`
 
 ## Screenshots
