@@ -22,12 +22,18 @@ public class ChatHudMixin {
     private static final Pattern CONQUER_REGEX = Pattern.compile("(?<poi>.+) has been conquered! It will respawn in (?<minutes>\\d+) minutes.*");
 
     /**
-     * Appends shard name to POI conquer messages.
+     * Listens for POI conquer messages to append shard name and track respawning POIs
      */
     @ModifyVariable(at = @At("LOAD"), method = "Lnet/minecraft/client/gui/hud/ChatHud;addMessage(Lnet/minecraft/text/Text;)V", name="message", ordinal=0, argsOnly = true)
     public Text addMessage(Text message) {
         if (message == null) {
             return null;
+        }
+        // Monumenta resends the most recent messages immediately after the player changes worlds,
+        // effectively duplicating them.
+        // This check prevents the mod from processing them
+        if (System.currentTimeMillis() - PoiRespawnTracker.lastWorldChangeMillis < 500) {
+            return message;
         }
 
         Style style = message.getStyle();

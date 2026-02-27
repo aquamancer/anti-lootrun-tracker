@@ -8,6 +8,8 @@ import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.minecraft.text.Text;
+import net.minecraft.world.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +28,7 @@ public class AntiLootrunTracker implements ClientModInitializer {
 			MobScanner.onTick();
 			ShardInfo.onTick();
 			MobListManager.onTick();
-			PoiRespawnTracker.onTick();
+			PoiRespawnTracker.onTick(client);
         });
 
 		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, lines) -> {

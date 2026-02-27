@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,9 @@ import java.util.Map;
  * Data structure representing respawning POIs and also renders the tooltips
  */
 public class PoiRespawnTracker {
+    private static World lastWorld = null;
+    public static long lastWorldChangeMillis;
+
     private static final int CLEANUP_INTERVAL_TICKS = 20;
     private static int ticksUntilCleanup = 0;
     // Map<shard, <poi name, system respawn time>>
@@ -26,16 +30,20 @@ public class PoiRespawnTracker {
             // prevent abuse
             return;
         }
-        // when changing shards, monumenta resends all recent chat messages, so we don't replace existing pois respawn time
         respawningPois.computeIfAbsent(shard, s -> new HashMap<>())
-                .computeIfAbsent(name, n -> System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
+                .put(name, System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
     }
 
-    public static void onTick() {
+    public static void onTick(MinecraftClient client) {
         ticksUntilCleanup--;
         if (ticksUntilCleanup <= 0) {
             removeRespawnedPois();
             ticksUntilCleanup = CLEANUP_INTERVAL_TICKS;
+        }
+        World currentWorld = client.world;
+        if (lastWorld != currentWorld) {
+            lastWorld = currentWorld;
+            lastWorldChangeMillis = System.currentTimeMillis();
         }
     }
 
