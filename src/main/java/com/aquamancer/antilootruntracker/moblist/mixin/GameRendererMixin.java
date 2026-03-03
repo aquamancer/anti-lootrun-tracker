@@ -1,4 +1,4 @@
-package com.aquamancer.antilootruntracker.mixin;
+package com.aquamancer.antilootruntracker.moblist.mixin;
 
 import com.aquamancer.antilootruntracker.moblist.MobDistanceList;
 import com.aquamancer.antilootruntracker.moblist.MobListManager;

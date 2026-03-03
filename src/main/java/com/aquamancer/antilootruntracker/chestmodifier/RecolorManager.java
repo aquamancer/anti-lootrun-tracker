@@ -1,5 +1,6 @@
-package com.aquamancer.antilootruntracker;
+package com.aquamancer.antilootruntracker.chestmodifier;
 
+import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.util.Identifier;

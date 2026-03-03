@@ -1,9 +1,9 @@
-package com.aquamancer.antilootruntracker.mixin;
+package com.aquamancer.antilootruntracker.chestmodifier.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
-import com.aquamancer.antilootruntracker.RecolorManager;
 import com.aquamancer.antilootruntracker.MobScanner;
 import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.chestmodifier.RecolorManager;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;

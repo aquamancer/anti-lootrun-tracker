@@ -1,9 +1,9 @@
 {
   "required": true,
-  "package": "com.aquamancer.antilootruntracker.mixin",
+  "package": "com.aquamancer.antilootruntracker.poirespawn.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "PlayerListHudMixin"
+    "ChatHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

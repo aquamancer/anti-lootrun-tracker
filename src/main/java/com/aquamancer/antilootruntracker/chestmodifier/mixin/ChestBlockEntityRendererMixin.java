@@ -1,4 +1,4 @@
-package com.aquamancer.antilootruntracker.mixin;
+package com.aquamancer.antilootruntracker.chestmodifier.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobScanner;

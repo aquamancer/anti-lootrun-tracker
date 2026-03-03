@@ -25,6 +25,18 @@
 		{
 			"config": "anti-lootrun-tracker.mixins.json",
 			"environment": "client"
+		},
+		{
+			"config": "chestmodifier.mixins.json",
+			"environment": "client"
+		},
+		{
+			"config": "moblist.mixins.json",
+			"environment": "client"
+		},
+		{
+			"config": "poirespawn.mixins.json",
+			"environment": "client"
 		}
 	],
 	"depends": {

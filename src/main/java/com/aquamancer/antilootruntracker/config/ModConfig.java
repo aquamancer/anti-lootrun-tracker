@@ -1,7 +1,7 @@
 package com.aquamancer.antilootruntracker.config;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
-import com.aquamancer.antilootruntracker.RecolorManager;
+import com.aquamancer.antilootruntracker.chestmodifier.RecolorManager;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry.ColorPicker;
