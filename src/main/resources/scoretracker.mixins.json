@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.aquamancer.antilootruntracker.mobscoretracker.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+    "LivingEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+  ]
+}

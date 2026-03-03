@@ -37,6 +37,10 @@
 		{
 			"config": "poirespawn.mixins.json",
 			"environment": "client"
+		},
+		{
+			"config": "scoretracker.mixins.json",
+			"environment": "client"
 		}
 	],
 	"depends": {
