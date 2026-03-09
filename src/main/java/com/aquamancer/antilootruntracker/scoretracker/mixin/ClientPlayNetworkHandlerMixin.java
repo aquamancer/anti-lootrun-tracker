@@ -16,9 +16,15 @@ public abstract class ClientPlayNetworkHandlerMixin {
     @Inject(at=@At("HEAD"), method="onOpenScreen(Lnet/minecraft/network/packet/s2c/play/OpenScreenS2CPacket;)V")
     private void onOpenScreen(OpenScreenS2CPacket packet, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
+        client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
         if (packet != null && client.player != null) {
+            client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
+            if (((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId() == packet.getSyncId()) {
+                client.player.sendMessage(Text.literal("onOpenScreen already has this id opened"));
+                return;
+            }
             client.execute(() -> {
-                client.player.sendMessage(Text.literal("onOpenScreen: {name: " + ((TranslatableTextContent)packet.getName().getContent()).getKey() + ", screenhandlertype: " + packet.getScreenHandlerType() + ", syncid: " + packet.getSyncId() + "}"));
+                client.player.sendMessage(Text.literal("onOpenScreen: {name: " + ((packet.getName().getContent() instanceof TranslatableTextContent) ? ((TranslatableTextContent)packet.getName().getContent()).getKey() : packet.getName()) + ", screenhandlertype: " + packet.getScreenHandlerType() + ", syncid: " + packet.getSyncId() + "}"));
                 client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis())));
             });
         }
@@ -40,10 +46,11 @@ public abstract class ClientPlayNetworkHandlerMixin {
     private void onBlockEvent(BlockEventS2CPacket packet, CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (packet != null && client.player != null) {
-            client.execute(() -> {
-                client.player.sendMessage(Text.literal("Block event: { block: " + packet.getBlock() + ", data: " + packet.getData() + ", pos: " + packet.getPos() + ", type: " + packet.getType() + "}"));
-                client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis())));
-            });
+            client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
+//            client.execute(() -> {
+//                client.player.sendMessage(Text.literal("Block event: { block: " + packet.getBlock() + ", data: " + packet.getData() + ", pos: " + packet.getPos() + ", type: " + packet.getType() + "}"));
+//                client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis())));
+//            });
         }
     }
 }
