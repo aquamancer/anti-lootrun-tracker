@@ -1,6 +1,6 @@
 package com.aquamancer.antilootruntracker.scoretracker.mixin;
 
-import net.minecraft.client.MinecraftClient;
+import com.aquamancer.antilootruntracker.scoretracker.ScoreTracker;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -15,31 +15,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class LivingEntityMixin {
     @Inject(at=@At("HEAD"), method="Lnet/minecraft/entity/LivingEntity;onDeath(Lnet/minecraft/entity/damage/DamageSource;)V")
     public void onDeath(DamageSource damageSource, CallbackInfo ci) {
-        LivingEntity self;
+        LivingEntity instance;
         try {
-            self = (LivingEntity)(Object) this;
+            instance = (LivingEntity)(Object) this;
         } catch (ClassCastException ex) {
             return;
         }
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player != null && self.getRecentDamageSource() != null) {
-            prettyPrint(true, self.getRecentDamageSource(), client.player);
-            if (self.getRecentDamageSource().getAttacker() == client.player) {
-                client.player.sendMessage(Text.literal("killed by me"));
-            }
-        } else {
-            client.player.sendMessage(Text.literal("Death source is null"));
-        }
+        ScoreTracker.onEntityDeath(instance, damageSource);
     }
 
-//    @Inject(at=@At("HEAD"), method="onDamaged")
-//    public void onDamaged(DamageSource damageSource, CallbackInfo ci) {
-//        MinecraftClient client = MinecraftClient.getInstance();
-//        if (client.player != null && damageSource != null) {
-//            prettyPrint(false, damageSource, client.player);
-//        }
-//    }
-//
     @Unique
     private static void prettyPrint(boolean death, DamageSource d, ClientPlayerEntity player) {
         if (death) {

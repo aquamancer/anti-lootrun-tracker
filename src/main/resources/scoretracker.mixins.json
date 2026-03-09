@@ -1,9 +1,13 @@
 {
   "required": true,
-  "package": "com.aquamancer.antilootruntracker.mobscoretracker.mixin",
+  "package": "com.aquamancer.antilootruntracker.scoretracker.mixin",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "BlockMixin",
+    "WorldMixin",
+    "PlayerEntityMixin",
+    "ClientPlayNetworkHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

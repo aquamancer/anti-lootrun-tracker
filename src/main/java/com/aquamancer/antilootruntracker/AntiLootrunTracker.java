@@ -3,6 +3,7 @@ package com.aquamancer.antilootruntracker;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import com.aquamancer.antilootruntracker.moblist.MobListManager;
 import com.aquamancer.antilootruntracker.poirespawn.PoiRespawnTracker;
+import com.aquamancer.antilootruntracker.scoretracker.ScoreTracker;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -28,6 +29,7 @@ public class AntiLootrunTracker implements ClientModInitializer {
 			ShardInfo.onTick();
 			MobListManager.onTick();
 			PoiRespawnTracker.onTick(client);
+			ScoreTracker.onTick(client);
         });
 
 		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, lines) -> {

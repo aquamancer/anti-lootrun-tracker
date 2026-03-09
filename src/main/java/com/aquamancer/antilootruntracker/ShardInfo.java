@@ -16,6 +16,7 @@ public class ShardInfo {
 
     private static String currentShard;
     private static boolean inValidShard;
+    private static boolean inLootrunProtectedShard;
     private static int ticksUntilUpdate;
 
     public static void onTick() {
@@ -54,6 +55,11 @@ public class ShardInfo {
 
     public static boolean inValidShard() {
         return inValidShard;
+    }
+
+    public static boolean inLootrunProtectedShard() {
+        // todo fix this later
+        return true;
     }
 
 //	public static String getShortShard() {
