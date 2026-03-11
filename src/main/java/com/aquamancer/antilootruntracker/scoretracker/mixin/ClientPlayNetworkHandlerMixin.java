@@ -1,5 +1,6 @@
 package com.aquamancer.antilootruntracker.scoretracker.mixin;
 
+import com.aquamancer.antilootruntracker.scoretracker.ChestOpenListener;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.*;
@@ -15,28 +16,19 @@ public abstract class ClientPlayNetworkHandlerMixin {
     // packet sent on chest open, before inventory packet and chest open animation packet
     @Inject(at=@At("HEAD"), method="onOpenScreen(Lnet/minecraft/network/packet/s2c/play/OpenScreenS2CPacket;)V")
     private void onOpenScreen(OpenScreenS2CPacket packet, CallbackInfo ci) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
-        if (packet != null && client.player != null) {
-            client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
-            if (((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId() == packet.getSyncId()) {
-                client.player.sendMessage(Text.literal("onOpenScreen already has this id opened"));
-                return;
-            }
-            client.execute(() -> {
-                client.player.sendMessage(Text.literal("onOpenScreen: {name: " + ((packet.getName().getContent() instanceof TranslatableTextContent) ? ((TranslatableTextContent)packet.getName().getContent()).getKey() : packet.getName()) + ", screenhandlertype: " + packet.getScreenHandlerType() + ", syncid: " + packet.getSyncId() + "}"));
-                client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis())));
-            });
-        }
+        MinecraftClient.getInstance().execute(() -> {
+            ChestOpenListener.onOpenScreen(packet);
+        });
     }
 
     // packet sent on chest open, before onBlockEvent below
     @Inject(at=@At("HEAD"), method="onInventory(Lnet/minecraft/network/packet/s2c/play/InventoryS2CPacket;)V")
     private void onInventory(InventoryS2CPacket packet, CallbackInfo ci) {
+        ChestOpenListener.onInventory(packet);
         MinecraftClient client = MinecraftClient.getInstance();
-        if (packet != null && client.player != null) {
-            client.execute(() -> client.player.sendMessage(Text.literal("inventory packet: " + packet.getContents().get(0) + " syncid: " + packet.getSyncId())));
-            client.execute(() -> client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis()))));
+        if (packet != null && client.player != null && packet.getSyncId() != 0) {
+//            client.execute(() -> client.player.sendMessage(Text.literal("inventory packet: " + packet.getContents() + " syncid: " + packet.getSyncId())));
+//            client.execute(() -> client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis()))));
         }
     }
 
@@ -44,13 +36,14 @@ public abstract class ClientPlayNetworkHandlerMixin {
     // packet sent for chest close/open animation. used to link the inventory packet to the in-world chest
     @Inject(at=@At("HEAD"), method="onBlockEvent(Lnet/minecraft/network/packet/s2c/play/BlockEventS2CPacket;)V")
     private void onBlockEvent(BlockEventS2CPacket packet, CallbackInfo ci) {
+        ChestOpenListener.onBlockEvent(packet);
         MinecraftClient client = MinecraftClient.getInstance();
         if (packet != null && client.player != null) {
-            client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
-//            client.execute(() -> {
+//            client.player.sendMessage(Text.literal(String.valueOf(((ScreenHandlerMixin) client.player.currentScreenHandler).getSyncId())));
+            client.execute(() -> {
 //                client.player.sendMessage(Text.literal("Block event: { block: " + packet.getBlock() + ", data: " + packet.getData() + ", pos: " + packet.getPos() + ", type: " + packet.getType() + "}"));
 //                client.player.sendMessage(Text.literal(String.valueOf(System.currentTimeMillis())));
-//            });
+            });
         }
     }
 }

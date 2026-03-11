@@ -8,7 +8,8 @@
     "WorldMixin",
     "PlayerEntityMixin",
     "ClientPlayNetworkHandlerMixin",
-    "ScreenHandlerMixin"
+    "ScreenHandlerMixin",
+    "GenericContainerScreenHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
