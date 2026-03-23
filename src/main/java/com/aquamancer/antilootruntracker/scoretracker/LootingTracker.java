@@ -10,7 +10,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.BlockEventS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -20,7 +19,50 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class LootingTracker {
-    record DoubleChest(BlockPos left, BlockPos right) {}
+    record OpenedSingleChest(String shard, BlockPos pos, List<ItemStack> contents) {
+        @Override
+        public boolean equals(Object o2) {
+            if (this == o2) return true;
+            return (o2 instanceof OpenedSingleChest c) && c.shard.equals(this.shard) && c.pos.equals(this.pos);
+        }
+        @Override
+        public int hashCode() {
+            return Objects.hash(shard, pos);
+        }
+    }
+    record OpenedDoubleChest(String shard, BlockPos left, List<ItemStack> leftContents, BlockPos right, List<ItemStack> rightContents) {
+        @Override
+        public boolean equals(Object o2) {
+            if (this == o2) return true;
+            return (o2 instanceof OpenedDoubleChest c) && c.shard.equals(this.shard) && c.left.equals(this.left) && c.right.equals(this.right);
+        }
+        @Override
+        public int hashCode() {
+            return Objects.hash(shard, left, right);
+        }
+    }
+    record BrokenChest(String shard, BlockPos pos, List<ItemStack> contents) {
+        @Override
+        public boolean equals(Object o2) {
+            if (this == o2) return true;
+            return (o2 instanceof BrokenChest c) && c.shard.equals(this.shard) && c.pos.equals(this.pos);
+        }
+        @Override
+        public int hashCode() {
+            return Objects.hash(shard, pos);
+        }
+    }
+    record ExplodedSingleChest(String shard, BlockPos pos, List<ItemStack> contents) {
+        @Override
+        public boolean equals(Object o2) {
+            if (this == o2) return true;
+            return (o2 instanceof ExplodedSingleChest c) && c.shard.equals(this.shard) && c.pos.equals(this.pos);
+        }
+        @Override
+        public int hashCode() {
+            return Objects.hash(shard, pos);
+        }
+    }
 
     private static final int MAX_BANKED_CHESTS = 4;
     private static final int RING_MOB_COST = 16;

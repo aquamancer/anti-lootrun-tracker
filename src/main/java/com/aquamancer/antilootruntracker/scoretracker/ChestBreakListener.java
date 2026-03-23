@@ -45,6 +45,7 @@ public class ChestBreakListener {
 
         @Override
         public boolean equals(Object o2) {
+            if (this == o2) return true;
             return (o2 instanceof BrokenChest c) && this.pos.equals(c.pos);
         }
 
