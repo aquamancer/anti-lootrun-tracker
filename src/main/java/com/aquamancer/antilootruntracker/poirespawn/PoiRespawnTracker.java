@@ -1,6 +1,7 @@
 package com.aquamancer.antilootruntracker.poirespawn;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
+import com.aquamancer.antilootruntracker.WorldChangeTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,6 @@ import java.util.Map;
  * Data structure representing respawning POIs and also renders the tooltips
  */
 public class PoiRespawnTracker {
-    private static World lastWorld = null;
     public static long lastWorldChangeMillis;
 
     private static final int CLEANUP_INTERVAL_TICKS = 20;
@@ -26,13 +26,9 @@ public class PoiRespawnTracker {
     // Map<shard, <poi name, system respawn time>>
     private static final Map<String, Map<String, Long>> respawningPois = new HashMap<>();
 
-    public static void addPoi(String name, int respawnInMinutes, String shard) {
-        if (respawningPois.values().stream().mapToInt(Map::size).sum() > 100) {
-            // prevent abuse
-            return;
-        }
-        respawningPois.computeIfAbsent(shard, s -> new HashMap<>())
-                .put(name, System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
+
+    public static void init() {
+        WorldChangeTracker.register((world) -> lastWorldChangeMillis = System.currentTimeMillis());
     }
 
     public static void onTick(MinecraftClient client) {
@@ -41,11 +37,16 @@ public class PoiRespawnTracker {
             removeRespawnedPois();
             ticksUntilCleanup = CLEANUP_INTERVAL_TICKS;
         }
-        World currentWorld = client.world;
-        if (lastWorld != currentWorld) {
-            lastWorld = currentWorld;
-            lastWorldChangeMillis = System.currentTimeMillis();
+    }
+
+
+    public static void addPoi(String name, int respawnInMinutes, String shard) {
+        if (respawningPois.values().stream().mapToInt(Map::size).sum() > 100) {
+            // prevent abuse
+            return;
         }
+        respawningPois.computeIfAbsent(shard, s -> new HashMap<>())
+                .put(name, System.currentTimeMillis() + (long) respawnInMinutes * 60 * 1000);
     }
 
     public static void renderTimersInTooltip(ItemStack stack, List<Text> lines) {

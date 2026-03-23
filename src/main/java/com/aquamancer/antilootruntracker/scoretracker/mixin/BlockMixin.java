@@ -1,5 +1,6 @@
 package com.aquamancer.antilootruntracker.scoretracker.mixin;
 
+import com.aquamancer.antilootruntracker.scoretracker.ChestBreakListener;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,17 +27,11 @@ import java.util.function.Supplier;
 
 @Mixin(Block.class)
 public class BlockMixin {
+    @Inject(at=@At("HEAD"), method="Lnet/minecraft/block/Block;onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/block/BlockState;")
+    private void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<BlockState> cir) {
+        ChestBreakListener.onBlockMined(world, pos, state);
+    }
 
-
-//    @Inject(at=@At("HEAD"), method="Lnet/minecraft/block/Block;onBreak(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;Lnet/minecraft/entity/player/PlayerEntity;)Lnet/minecraft/block/BlockState;")
-//    private void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<BlockState> cir) {
-//        MinecraftClient client = MinecraftClient.getInstance();
-//        if (client.player != null) {
-//            client.player.sendMessage(Text.literal("onBreak: " + pos.toString()));
-//            client.player.sendMessage(Text.literal("Plyaer: " + player.toString()));
-//        }
-//    }
-//
 //    @Inject(at=@At("HEAD"), method="Lnet/minecraft/block/Block;onBroken(Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;)V")
 //    private void onBroken(WorldAccess world, BlockPos pos, BlockState state, CallbackInfo ci) {
 //        MinecraftClient client = MinecraftClient.getInstance();
@@ -45,15 +40,7 @@ public class BlockMixin {
 //        }
 //    }
 //
-//    @Inject(at=@At("HEAD"), method="")
-//    private void onBroken(WorldAccess world, BlockPos pos, BlockState state, CallbackInfo ci) {
-//        MinecraftClient client = MinecraftClient.getInstance();
-//        if (client.player != null) {
-//            client.player.sendMessage(Text.literal("onBroken: " + pos.toString()));
-//        }
-//    }
-//
-//
+// works, but not needed
 //    @Inject(at=@At("HEAD"), method="Lnet/minecraft/block/Block;replace(Lnet/minecraft/block/BlockState;Lnet/minecraft/block/BlockState;Lnet/minecraft/world/WorldAccess;Lnet/minecraft/util/math/BlockPos;I)V")
 //    private static void onReplace(BlockState state, BlockState newState, WorldAccess world, BlockPos pos, int flags, CallbackInfo ci) {
 //        MinecraftClient client = MinecraftClient.getInstance();

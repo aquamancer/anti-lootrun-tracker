@@ -1,6 +1,6 @@
 package com.aquamancer.antilootruntracker.scoretracker.mixin;
 
-import com.aquamancer.antilootruntracker.scoretracker.ScoreTracker;
+import com.aquamancer.antilootruntracker.scoretracker.LootingTracker;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -21,7 +21,7 @@ public class LivingEntityMixin {
         } catch (ClassCastException ex) {
             return;
         }
-        ScoreTracker.onEntityDeath(instance, damageSource);
+        LootingTracker.onEntityDeath(instance, damageSource);
     }
 
     @Unique

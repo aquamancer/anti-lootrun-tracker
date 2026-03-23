@@ -10,14 +10,18 @@ import java.util.regex.Pattern;
 /**
  * Holds the state of the player's current shard and handles update logic.
  */
-public class ShardInfo {
+public class ShardTracker {
     private static final Pattern shardRegex = Pattern.compile(".*<(?<shard>[-\\w\\d]*)>.*");
-    private static final int updateIntervalTicks = 40;  // not configurable to user since updating shard is inexpensive
+    private static final int updateIntervalTicks = 40;
 
     private static String currentShard;
     private static boolean inValidShard;
     private static boolean inLootrunProtectedShard;
     private static int ticksUntilUpdate;
+
+    public static void init() {
+        WorldChangeTracker.register((world) -> updateCurrentShard());
+    }
 
     public static void onTick() {
         ticksUntilUpdate--;

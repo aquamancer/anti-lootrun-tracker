@@ -8,7 +8,7 @@ import net.minecraft.text.TranslatableTextContent;
 
 import java.util.List;
 
-public abstract class ChestOpenListener {
+public class ChestOpenListener {
     static class Match {
         private static final long MATCH_WINDOW_MILLIS = 100L;
 
@@ -19,32 +19,26 @@ public abstract class ChestOpenListener {
         int syncId;
         BlockEventS2CPacket blockEvent;
 
-        private final long createdAt;
-        private boolean expired = false;
+        private final long timeCreated;
+
+        private long timeMatched;
 
         private Match(OpenScreenS2CPacket screen, String screenName) {
             this.screen = screen;
             this.screenName = screenName;
             this.syncId = screen.getSyncId();
-            this.createdAt = System.currentTimeMillis();
+            this.timeCreated = System.currentTimeMillis();
         }
 
         private boolean isExpired() {
-            if (expired) {
-                return true;
-            }
-            return expired = (System.currentTimeMillis() > createdAt + MATCH_WINDOW_MILLIS);
+            return System.currentTimeMillis() > timeCreated + MATCH_WINDOW_MILLIS;
         }
     }
 
     private static Match match;
 
-    public static void onTick() {
-        // expire unclaimed screen packets
-    }
-
     public static void onOpenScreen(OpenScreenS2CPacket screen) {
-        if (screen.getSyncId() == 0 || screen.getName() == null) {
+        if (screen == null || screen.getSyncId() == 0 || screen.getName() == null) {
             return;
         }
         if (!(screen.getName().getContent() instanceof TranslatableTextContent)) {
@@ -72,17 +66,28 @@ public abstract class ChestOpenListener {
         match.container = inv.getContents().subList(0, inv.getContents().size() - 9 * 4);
     }
 
+    // chest open animation used to get its location
     public static void onBlockEvent(BlockEventS2CPacket packet) {
-        if (match == null
-                || match.isExpired()
-                || match.inv == null
-                || match.blockEvent != null
-                || packet.getData() == 0
-        ) {
+        if (match == null || match.isExpired()) return;
+
+        if (System.currentTimeMillis() - match.timeMatched < 20 && isAdjacentToMatch(packet)) {
+            // then the match chest is a double chest,
+            // and this packet is for match's other half
+            LootingTracker.registerDoubleChest(match, packet);
+            return;
+        }
+
+        if (match.inv == null || match.blockEvent != null || packet.getData() == 0) {
             return;
         }
         match.blockEvent = packet;
-        ScoreTracker.onChestOpened(match);
-        match.expired = true;
+        match.timeMatched = System.currentTimeMillis();
+        LootingTracker.onChestOpened(match);
+    }
+
+
+    private static boolean isAdjacentToMatch(BlockEventS2CPacket packet) {
+        double tolerance = 0.01;
+        return Math.abs(packet.getPos().getSquaredDistance(match.blockEvent.getPos()) - 1) < tolerance;
     }
 }

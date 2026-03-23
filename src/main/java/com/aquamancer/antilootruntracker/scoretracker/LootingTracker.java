@@ -1,21 +1,21 @@
 package com.aquamancer.antilootruntracker.scoretracker;
 
-import com.aquamancer.antilootruntracker.ShardInfo;
-import net.minecraft.block.entity.ChestBlockEntity;
+import com.aquamancer.antilootruntracker.ShardTracker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.BlockEventS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ScoreTracker {
+public class LootingTracker {
+    record DoubleChest(BlockPos left, BlockPos right) {}
+
     private static final int MAX_BANKED_CHESTS = 4;
     private static final int RING_MOB_COST = 16;
     private static final int RING_SPAWNER_COST = 8;
@@ -23,26 +23,40 @@ public class ScoreTracker {
     private static final int ISLES_SPAWNER_COST = 2;
     private static final int VALLEY_MOB_COST = 4;
     private static final int VALLEY_SPAWNER_COST = 2;
+    private static final Set<String> CURRENCY = new HashSet<>(List.of(
+            "Archos Ring",
+            "Compressed Crystalline Shard",
+            "Crystalline Shard",
+            "Concentrated Experience",
+            "Experience Bottle"
+    ));
 
     private static int mobScore;
     private static int spawnerScore;
 
     private static ChestOpenListener.Match openedChest;
     private static final Map<String, Map<BlockPos, SimpleInventory>> chestHistory = new HashMap<>();
-
-    public static void onTick(MinecraftClient client) {
-    }
+    private static final Map<String, Set<DoubleChest>> doubleChests = new HashMap<>();
 
     public static void onEntityDeath(LivingEntity entity, DamageSource lastDamageSource) {
         MinecraftClient client = MinecraftClient.getInstance();
         if (entity == null || lastDamageSource == null || client.player == null) {
             return;
         }
-        if (lastDamageSource.getAttacker() != client.player || !ShardInfo.inLootrunProtectedShard()) {
+        if (lastDamageSource.getAttacker() != client.player || !ShardTracker.inLootrunProtectedShard()) {
             return;
         }
 
         mobScore++;
+    }
+
+    static void onChestBroken(ChestBreakListener.BrokenChest chest) {
+        String shard = chest.shard;
+        if (chest.isSingleChest && doubleChests.containsKey(shard) && doubleChests.get(shard).contains(chest.pos)) {
+            // the other half was already mined
+            return;
+        }
+
     }
 
     static void onChestOpened(ChestOpenListener.Match match) {
@@ -51,9 +65,16 @@ public class ScoreTracker {
         if (client.player == null) return;
 //        if (!ShardInfo.inLootrunProtectedShard()) return;
 
-        if (!chestWasModified(ShardInfo.getCurrentShard())) {
+        String shard = ShardTracker.getCurrentShard();
+        if (doubleChests.containsKey(shard) && doubleChests.get(shard).contains(match.blockEvent.getPos())) {
+            client.player.sendMessage(Text.literal("Double chest opened!"));
+        }
+        if (!chestWasModified(ShardTracker.getCurrentShard())) {
             client.player.sendMessage(Text.literal("Chest is the same!"));
-            return;
+//            return;
+        }
+        if (!resemblesGeneratedChest(match.container)) {
+            client.player.sendMessage(Text.literal("!resemblesGeneratedChest"));
         }
         client.player.sendMessage(Text.literal("New chest opened: " + match.blockEvent.getPos()));
     }
@@ -62,12 +83,20 @@ public class ScoreTracker {
         if (openedChest == null || !(contents instanceof SimpleInventory)) {
             return;
         }
-        chestHistory.computeIfAbsent(ShardInfo.getCurrentShard(), s -> new HashMap<>())
+        chestHistory.computeIfAbsent(ShardTracker.getCurrentShard(), s -> new HashMap<>())
                     .put(openedChest.blockEvent.getPos(), (SimpleInventory) contents);
         openedChest = null;
     }
 
+    static void registerDoubleChest(ChestOpenListener.Match first, BlockEventS2CPacket second) {
+        String shard = ShardTracker.getCurrentShard();
+        doubleChests.computeIfAbsent(shard, s -> new HashSet<>())
+                .addAll(List.of(first.blockEvent.getPos(), second.getPos()));
+    }
+
     private static boolean chestWasModified(String shard) {
+        if (openedChest == null) return true;
+
         BlockPos pos = openedChest.blockEvent.getPos();
         List<ItemStack> currentContents = openedChest.container;
 
@@ -86,4 +115,16 @@ public class ScoreTracker {
         }
         return false;
     }
+
+    private static boolean resemblesGeneratedChest(List<ItemStack> container) {
+        if (container.size() > 54) return false;
+        return container.stream().anyMatch(stack -> {
+            if (stack.getName() == null) return false;
+            if (CURRENCY.contains(stack.getName().getString())) {
+                return true;
+            }
+            return false;
+        });
+    }
+
 }

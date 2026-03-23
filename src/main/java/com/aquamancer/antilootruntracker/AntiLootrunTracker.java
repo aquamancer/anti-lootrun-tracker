@@ -3,7 +3,7 @@ package com.aquamancer.antilootruntracker;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import com.aquamancer.antilootruntracker.moblist.MobListManager;
 import com.aquamancer.antilootruntracker.poirespawn.PoiRespawnTracker;
-import com.aquamancer.antilootruntracker.scoretracker.ScoreTracker;
+import com.aquamancer.antilootruntracker.scoretracker.LootingTracker;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -24,12 +24,21 @@ public class AntiLootrunTracker implements ClientModInitializer {
 		ConfigHolder<ModConfig> configHolder = AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
 		config = configHolder.getConfig();
 
+		PoiRespawnTracker.init();
+		ShardTracker.init();
+
+		ClientTickEvents.START_CLIENT_TICK.register(client -> {
+			WorldChangeTracker.onTick(client);
+		});
+
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			MobScanner.onTick();
-			ShardInfo.onTick();
+			ShardTracker.onTick();
 			MobListManager.onTick();
 			PoiRespawnTracker.onTick(client);
-			ScoreTracker.onTick(client);
+//			if (client.player != null) {
+//				client.player.sendMessage(Text.literal("End of tick--"));
+//			}
         });
 
 		ItemTooltipCallback.EVENT.register((itemStack, tooltipContext, lines) -> {

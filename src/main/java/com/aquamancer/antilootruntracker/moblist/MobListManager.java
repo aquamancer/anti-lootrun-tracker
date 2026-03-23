@@ -2,7 +2,7 @@ package com.aquamancer.antilootruntracker.moblist;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobScanner;
-import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.ShardTracker;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -80,6 +80,6 @@ public class MobListManager {
 
     public static boolean shouldRenderMobList() {
         ModConfig config = AntiLootrunTracker.config;
-        return config.isModEnabled() && ShardInfo.inValidShard() && config.isMobListEnabled() && disabledDuration <= 0;
+        return config.isModEnabled() && ShardTracker.inValidShard() && config.isMobListEnabled() && disabledDuration <= 0;
     }
 }

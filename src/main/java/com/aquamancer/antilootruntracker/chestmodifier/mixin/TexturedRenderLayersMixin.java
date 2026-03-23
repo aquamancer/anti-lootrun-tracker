@@ -2,7 +2,7 @@ package com.aquamancer.antilootruntracker.chestmodifier.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobScanner;
-import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.ShardTracker;
 import com.aquamancer.antilootruntracker.chestmodifier.RecolorManager;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.block.entity.BlockEntity;
@@ -47,7 +47,7 @@ public class TexturedRenderLayersMixin {
     @Unique
     private static boolean recolorFreeChests() {
                 ModConfig config = AntiLootrunTracker.config;
-                return config.isModEnabled() && ShardInfo.inValidShard() && config.recolorFreeChests();
+                return config.isModEnabled() && ShardTracker.inValidShard() && config.recolorFreeChests();
             }
 
     @Unique
@@ -55,6 +55,6 @@ public class TexturedRenderLayersMixin {
         ModConfig config = AntiLootrunTracker.config;
         return config.isModEnabled()
                     && config.recolorAllChests()
-                    && (config.shouldAllChestRecolorIgnoreShard() || ShardInfo.inValidShard());
+                    && (config.shouldAllChestRecolorIgnoreShard() || ShardTracker.inValidShard());
     }
 }

@@ -1,7 +1,7 @@
 package com.aquamancer.antilootruntracker.poirespawn.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
-import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.ShardTracker;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import com.aquamancer.antilootruntracker.poirespawn.PoiRespawnTracker;
 import net.minecraft.client.gui.hud.ChatHud;
@@ -50,7 +50,7 @@ public class ChatHudMixin {
         }
 
         try {
-            PoiRespawnTracker.addPoi(matcher.group("poi"), Integer.parseInt(matcher.group("minutes")), ShardInfo.getCurrentShard());
+            PoiRespawnTracker.addPoi(matcher.group("poi"), Integer.parseInt(matcher.group("minutes")), ShardTracker.getCurrentShard());
         } catch (RuntimeException ex) {
             AntiLootrunTracker.LOGGER.error("Parsing conquer message failed", ex);
         }
@@ -59,7 +59,7 @@ public class ChatHudMixin {
             return message;
         }
         MutableText newMessage = message.copy();
-        MutableText appendMessage = Text.literal(" (").append(ShardInfo.getCurrentShard()).append(")").formatted(Formatting.ITALIC, Formatting.AQUA);
+        MutableText appendMessage = Text.literal(" (").append(ShardTracker.getCurrentShard()).append(")").formatted(Formatting.ITALIC, Formatting.AQUA);
         newMessage.append(appendMessage);
         return newMessage;
     }

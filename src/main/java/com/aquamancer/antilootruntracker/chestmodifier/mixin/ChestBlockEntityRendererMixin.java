@@ -2,7 +2,7 @@ package com.aquamancer.antilootruntracker.chestmodifier.mixin;
 
 import com.aquamancer.antilootruntracker.AntiLootrunTracker;
 import com.aquamancer.antilootruntracker.MobScanner;
-import com.aquamancer.antilootruntracker.ShardInfo;
+import com.aquamancer.antilootruntracker.ShardTracker;
 import com.aquamancer.antilootruntracker.config.ModConfig;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
@@ -231,6 +231,6 @@ public class ChestBlockEntityRendererMixin {
     @Unique
     private static boolean isEnabled() {
         ModConfig config = AntiLootrunTracker.config;
-        return config.isModEnabled() && ShardInfo.inValidShard() && config.renderNumber();
+        return config.isModEnabled() && ShardTracker.inValidShard() && config.renderNumber();
     }
 }
