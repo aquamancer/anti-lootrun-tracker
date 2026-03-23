@@ -1,6 +1,9 @@
 package com.aquamancer.antilootruntracker.scoretracker;
 
 import com.aquamancer.antilootruntracker.ShardTracker;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ChestBlock;
+import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -10,6 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.BlockEventS2CPacket;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -59,13 +65,12 @@ public class LootingTracker {
 
     }
 
-    static void onChestOpened(ChestOpenListener.Match match) {
+    static void onChestOpened(ChestOpenListener.Match match, String shard) {
         openedChest = match;
         MinecraftClient client = MinecraftClient.getInstance();
         if (client.player == null) return;
 //        if (!ShardInfo.inLootrunProtectedShard()) return;
 
-        String shard = ShardTracker.getCurrentShard();
         if (doubleChests.containsKey(shard) && doubleChests.get(shard).contains(match.blockEvent.getPos())) {
             client.player.sendMessage(Text.literal("Double chest opened!"));
         }
@@ -88,10 +93,30 @@ public class LootingTracker {
         openedChest = null;
     }
 
-    static void registerDoubleChest(ChestOpenListener.Match first, BlockEventS2CPacket second) {
-        String shard = ShardTracker.getCurrentShard();
+    static void registerDoubleChest(BlockPos left, BlockPos right, String shard) {
         doubleChests.computeIfAbsent(shard, s -> new HashSet<>())
-                .addAll(List.of(first.blockEvent.getPos(), second.getPos()));
+                .add(new DoubleChest(left, right));
+    }
+
+    static void registerDoubleChest(DoubleChest doubleChest, String shard) {
+        doubleChests.computeIfAbsent(shard, s -> new HashSet<>())
+                .add(doubleChest);
+
+    }
+
+    @Nullable
+    static DoubleChest isDoubleChest(BlockPos pos, World world) {
+        BlockState state = world.getBlockState(pos);
+        ChestType chestType = state.get(ChestBlock.CHEST_TYPE);
+        Direction facing = state.get(ChestBlock.FACING);
+
+        if (chestType == ChestType.LEFT) {
+            return new DoubleChest(pos, pos.offset(facing.rotateYClockwise()));
+        } else if (chestType == ChestType.RIGHT) {
+            return new DoubleChest(pos.offset(facing.rotateYCounterclockwise()), pos);
+        } else {
+            return null;
+        }
     }
 
     private static boolean chestWasModified(String shard) {

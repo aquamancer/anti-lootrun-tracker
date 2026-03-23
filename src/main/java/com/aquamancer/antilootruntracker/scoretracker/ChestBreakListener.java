@@ -101,17 +101,4 @@ public class ChestBreakListener {
         }
     }
 
-    @Nullable
-    private static BlockPos getOtherHalf(BlockPos pos, BlockState state) {
-        ChestType chestType = state.get(ChestBlock.CHEST_TYPE);
-        Direction facing = state.get(ChestBlock.FACING);
-
-        if (chestType == ChestType.LEFT) {
-            return pos.offset(facing.rotateYClockwise());
-        } else if (chestType == ChestType.RIGHT) {
-            return pos.offset(facing.rotateYCounterclockwise());
-        } else {
-            return null;
-        }
-    }
 }
