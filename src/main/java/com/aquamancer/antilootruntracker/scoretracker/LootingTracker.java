@@ -5,8 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -19,48 +17,51 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class LootingTracker {
-    record OpenedSingleChest(String shard, BlockPos pos, List<ItemStack> contents) {
-        @Override
-        public boolean equals(Object o2) {
-            if (this == o2) return true;
-            return (o2 instanceof OpenedSingleChest c) && c.shard.equals(this.shard) && c.pos.equals(this.pos);
-        }
-        @Override
-        public int hashCode() {
-            return Objects.hash(shard, pos);
-        }
+    enum LootMethod {
+        OPENED,
+        MINED,
+        EXPLODED
     }
-    record OpenedDoubleChest(String shard, BlockPos left, List<ItemStack> leftContents, BlockPos right, List<ItemStack> rightContents) {
+    static class SingleChest {
+        private final BlockPos pos;
+        private final String shard;
+        private final List<ItemStack> contents;
+
+        // used to compare contents count-wise
+        private final Map<String, Integer> itemCount = new HashMap<>();
+
+        SingleChest(BlockPos pos, String shard, List<ItemStack> contents) {
+            this.pos = pos;
+            this.shard = shard;
+            this.contents = contents;
+            for (ItemStack stack : this.contents) {
+                itemCount.compute(stack.getName().getString(), (k, v) -> (v == null) ? stack.getCount() : v + stack.getCount());
+            }
+        }
+
+        private boolean contentsEqual(SingleChest c2) {
+            if (this.itemCount.size() != c2.itemCount.size()) return false;
+
+            for (Map.Entry<String, Integer> counts : this.itemCount.entrySet()) {
+                String itemName = counts.getKey();
+                Integer count = counts.getValue();
+
+                Integer comparison = c2.itemCount.get(itemName);
+                if (comparison == null || !comparison.equals(count)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         @Override
         public boolean equals(Object o2) {
-            if (this == o2) return true;
-            return (o2 instanceof OpenedDoubleChest c) && c.shard.equals(this.shard) && c.left.equals(this.left) && c.right.equals(this.right);
+            if (o2 == this) return true;
+            return (o2 instanceof SingleChest c) && c.pos.equals(this.pos) && c.shard.equals(this.shard);
         }
         @Override
         public int hashCode() {
-            return Objects.hash(shard, left, right);
-        }
-    }
-    record BrokenChest(String shard, BlockPos pos, List<ItemStack> contents) {
-        @Override
-        public boolean equals(Object o2) {
-            if (this == o2) return true;
-            return (o2 instanceof BrokenChest c) && c.shard.equals(this.shard) && c.pos.equals(this.pos);
-        }
-        @Override
-        public int hashCode() {
-            return Objects.hash(shard, pos);
-        }
-    }
-    record ExplodedSingleChest(String shard, BlockPos pos, List<ItemStack> contents) {
-        @Override
-        public boolean equals(Object o2) {
-            if (this == o2) return true;
-            return (o2 instanceof ExplodedSingleChest c) && c.shard.equals(this.shard) && c.pos.equals(this.pos);
-        }
-        @Override
-        public int hashCode() {
-            return Objects.hash(shard, pos);
+            return Objects.hash(this.pos, this.shard);
         }
     }
 
@@ -79,23 +80,21 @@ public class LootingTracker {
             "Experience Bottle"
     ));
 
-    private static int mobScore;
-    private static int spawnerScore;
-
-    private static ChestOpenListener.Match openedChest;
-    private static final Map<String, Map<BlockPos, SimpleInventory>> chestHistory = new HashMap<>();
+    private static final Set<SingleChest> singleChestHistory = new HashMap<>();
     private static final Map<String, Set<DoubleChest>> doubleChests = new HashMap<>();
 
-    public static void onEntityDeath(LivingEntity entity, DamageSource lastDamageSource) {
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (entity == null || lastDamageSource == null || client.player == null) {
-            return;
-        }
-        if (lastDamageSource.getAttacker() != client.player || !ShardTracker.inLootrunProtectedShard()) {
-            return;
-        }
+    static void onSingleChestLooted(SingleChest chest, LootMethod method) {
+        if (alreadyLooted(chest, method)) return;
+        if (!resemblesGeneratedChest(chest, method)) return;
+        // adjust points
+    }
 
-        mobScore++;
+    private static boolean alreadyLooted(SingleChest chest, LootMethod method) {
+
+        switch (method) {
+            case OPENED:
+                return
+        }
     }
 
     static void onChestBroken(ChestBreakListener.BrokenChest chest) {
