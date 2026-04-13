@@ -22,17 +22,16 @@ public class LootingTracker {
         MINED,
         EXPLODED
     }
+    record ChestLoc(String shard, BlockPos pos) {}
     static class SingleChest {
-        private final BlockPos pos;
-        private final String shard;
+        ChestLoc location;
         private final List<ItemStack> contents;
 
         // used to compare contents count-wise
         private final Map<String, Integer> itemCount = new HashMap<>();
 
-        SingleChest(BlockPos pos, String shard, List<ItemStack> contents) {
-            this.pos = pos;
-            this.shard = shard;
+        SingleChest(String shard, BlockPos pos, List<ItemStack> contents) {
+            this.location = new ChestLoc(shard, pos);
             this.contents = contents;
             for (ItemStack stack : this.contents) {
                 itemCount.compute(stack.getName().getString(), (k, v) -> (v == null) ? stack.getCount() : v + stack.getCount());
@@ -53,16 +52,6 @@ public class LootingTracker {
             }
             return true;
         }
-
-        @Override
-        public boolean equals(Object o2) {
-            if (o2 == this) return true;
-            return (o2 instanceof SingleChest c) && c.pos.equals(this.pos) && c.shard.equals(this.shard);
-        }
-        @Override
-        public int hashCode() {
-            return Objects.hash(this.pos, this.shard);
-        }
     }
 
     private static final int MAX_BANKED_CHESTS = 4;
@@ -80,7 +69,7 @@ public class LootingTracker {
             "Experience Bottle"
     ));
 
-    private static final Set<SingleChest> singleChestHistory = new HashMap<>();
+    private static final Map<ChestLoc, SingleChest> singleChestHistory = new HashMap<>();
     private static final Map<String, Set<DoubleChest>> doubleChests = new HashMap<>();
 
     static void onSingleChestLooted(SingleChest chest, LootMethod method) {
@@ -90,10 +79,11 @@ public class LootingTracker {
     }
 
     private static boolean alreadyLooted(SingleChest chest, LootMethod method) {
-
+        SingleChest previous = singleChestHistory.get(chest.location);
         switch (method) {
             case OPENED:
-                return
+
+
         }
     }
 
