@@ -23,18 +23,18 @@ public class ChestBreakListener {
         final String shard;
         final BlockPos pos;
         final BlockState state;
-        final boolean isSingleChest;
+        final ChestType chestType;
         private final Box blockBox;
         private final Deque<DroppedItem> itemsDroppedSinceBreak = new ArrayDeque<>();
         final Deque<ItemStack> actualContents = new ArrayDeque<>();
 
         private final long timeBroken;
 
-        private BrokenChest(String shard, BlockPos pos, BlockState state, boolean isSingleChest) {
+        private BrokenChest(String shard, BlockPos pos, BlockState state) {
             this.shard = shard;
             this.pos = pos;
             this.state = state;
-            this.isSingleChest = isSingleChest;
+            this.chestType = state.get(ChestBlock.CHEST_TYPE);
             this.blockBox = new Box(pos);
             this.timeBroken = System.currentTimeMillis();
         }

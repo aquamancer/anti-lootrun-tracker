@@ -94,9 +94,10 @@ public class LootingTracker {
     ));
 
     //
-    private static final Set<ChestLoc> alreadyLootedDoubleChestHalves = new HashSet<>();
+    private static final Set<ChestLoc> otherHalfLooted = new HashSet<>();
     private static final Map<ChestLoc, SimpleInventory> openedSingleChests = new HashMap<>();
     private static LootedChest openedChest;
+    private static ChestType openedChestType;
 
     private static void onChestLooted(LootedChest chest, LootMethod method) {
 //        if (!ShardInfo.inLootrunProtectedShard()) return;
@@ -116,12 +117,12 @@ public class LootingTracker {
     }
 
     static void onChestBroken(ChestBreakListener.BrokenChest chest) {
-        String shard = chest.shard;
-        if (chest.isSingleChest && doubleChests.containsKey(shard) && doubleChests.get(shard).contains(chest.pos)) {
-            // the other half was already mined
-            return;
+        BlockPos otherHalf = getOtherHalf(chest.pos, chest.state);
+        if (otherHalf != null) {
+            // is double chest
+            otherHalfLooted.add(new ChestLoc(chest.shard, otherHalf));
         }
-
+        onChestLooted(new LootedChest(chest.shard, chest.pos, new ArrayList<>(chest.actualContents)), LootMethod.MINED);
     }
 
     static void onChestOpened(ChestOpenListener.Match match, String shard) {
@@ -134,19 +135,28 @@ public class LootingTracker {
         if (openedChest == null || !(contents instanceof SimpleInventory)) {
             return;
         }
+
         openedChests.put(openedChest.location, (SimpleInventory) contents);
         openedChest = null;
     }
 
-    static void registerDoubleChest(BlockPos left, BlockPos right, String shard) {
-        doubleChests.computeIfAbsent(shard, s -> new HashSet<>())
-                .add(new DoubleChest(left, right));
+    static ChestType getChestType(World world, BlockPos pos) {
+        BlockState state = world.getBlockState(pos);
+        return state.get(ChestBlock.CHEST_TYPE);
     }
 
-    static void registerDoubleChest(DoubleChest doubleChest, String shard) {
-        doubleChests.computeIfAbsent(shard, s -> new HashSet<>())
-                .add(doubleChest);
+    @Nullable
+    static BlockPos getOtherHalf(BlockPos pos, BlockState state) {
+        ChestType chestType = state.get(ChestBlock.CHEST_TYPE);
+        Direction facing = state.get(ChestBlock.FACING);
 
+        if (chestType == ChestType.LEFT) {
+            return pos.offset(facing.rotateYClockwise());
+        } else if (chestType == ChestType.RIGHT) {
+            return pos.offset(facing.rotateYCounterclockwise());
+        } else {
+            return null;
+        }
     }
 
     @Nullable
@@ -196,5 +206,4 @@ public class LootingTracker {
             return false;
         });
     }
-
 }
