@@ -4,11 +4,9 @@ import com.aquamancer.antilootruntracker.ShardTracker;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ChestBlock;
 import net.minecraft.block.enums.ChestType;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -24,31 +22,54 @@ public class LootingTracker {
     }
 
     record ChestLoc(String shard, BlockPos pos) {}
+    record DoubleChest(String shard, BlockPos left, BlockPos right) {}
 
-    static class SingleChest {
-        ChestLoc location;
+    static class LootedChest {
+        private final ChestLoc location;
         private final List<ItemStack> contents;
 
         // used to compare contents count-wise
-        private final Map<String, Integer> itemCount = new HashMap<>();
+        private final Map<String, Integer> itemCount;
 
-        SingleChest(String shard, BlockPos pos, List<ItemStack> contents) {
+        LootedChest(String shard, BlockPos pos, List<ItemStack> contents) {
             this.location = new ChestLoc(shard, pos);
             this.contents = contents;
-            for (ItemStack stack : this.contents) {
-                itemCount.compute(stack.getName().getString(), (k, v) -> (v == null) ? stack.getCount() : v + stack.getCount());
+            this.itemCount = toCounts(this.contents);
+        }
+
+        LootedChest(ChestLoc location, List<ItemStack> contents) {
+            this.location = location;
+            this.contents = contents;
+            this.itemCount = toCounts(this.contents);
+        }
+
+        private static Map<String, Integer> toCounts(List<ItemStack> contents) {
+            Map<String, Integer> result = new HashMap<>();
+
+            for (ItemStack stack : contents) {
+                result.compute(stack.getName().getString(), (k, v) -> (v == null) ? stack.getCount() : v + stack.getCount());
             }
         }
 
-        private boolean contentsEqual(SingleChest c2) {
+        private boolean contentsEqual(LootedChest c2) {
             if (c2 == null) return false;
-            if (this.itemCount.size() != c2.itemCount.size()) return false;
+            return contentsEqual(c2.itemCount);
+        }
+
+        private boolean contentsEqual(SimpleInventory c2) {
+            if (c2 == null) return false;
+            return contentsEqual(toCounts(c2.clearToList()));
+        }
+
+        private boolean contentsEqual(Map<String, Integer> c2) {
+            if (c2 == null) return false;
+            if (this.itemCount.size() != c2.size()) return false;
 
             for (Map.Entry<String, Integer> counts : this.itemCount.entrySet()) {
                 String itemName = counts.getKey();
                 Integer count = counts.getValue();
 
-                Integer comparison = c2.itemCount.get(itemName);
+                Integer comparison = c2.get(itemName);
                 if (comparison == null || !comparison.equals(count)) {
                     return false;
                 }
@@ -72,18 +93,20 @@ public class LootingTracker {
             "Experience Bottle"
     ));
 
-    private static final Map<ChestLoc, SingleChest> singleChestHistory = new HashMap<>();
-    private static final Map<String, Set<DoubleChest>> doubleChests = new HashMap<>();
+    //
+    private static final Set<ChestLoc> alreadyLootedDoubleChestHalves = new HashSet<>();
+    private static final Map<ChestLoc, SimpleInventory> openedSingleChests = new HashMap<>();
+    private static LootedChest openedChest;
 
-    static void onSingleChestLooted(SingleChest chest, LootMethod method) {
+    private static void onChestLooted(LootedChest chest, LootMethod method) {
 //        if (!ShardInfo.inLootrunProtectedShard()) return;
         if (alreadyLooted(chest, method)) return;
         if (!resemblesGeneratedChest(chest, method)) return;
         // adjust points
     }
 
-    private static boolean alreadyLooted(SingleChest chest, LootMethod method) {
-        SingleChest previous = singleChestHistory.get(chest.location);
+    private static boolean alreadyLooted(LootedChest chest, LootMethod method) {
+        SimpleInventory previous = openedChests.get(chest.location);
         return switch (method) {
             case OPENED, MINED -> chest.contentsEqual(previous);
             case EXPLODED ->
@@ -102,30 +125,16 @@ public class LootingTracker {
     }
 
     static void onChestOpened(ChestOpenListener.Match match, String shard) {
-        openedChest = match;
-        MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null) return;
-//        if (!ShardInfo.inLootrunProtectedShard()) return;
-
-        if (doubleChests.containsKey(shard) && doubleChests.get(shard).contains(match.blockEvent.getPos())) {
-            client.player.sendMessage(Text.literal("Double chest opened!"));
-        }
-        if (!chestWasModified(ShardTracker.getCurrentShard())) {
-            client.player.sendMessage(Text.literal("Chest is the same!"));
-//            return;
-        }
-        if (!resemblesGeneratedChest(match.container)) {
-            client.player.sendMessage(Text.literal("!resemblesGeneratedChest"));
-        }
-        client.player.sendMessage(Text.literal("New chest opened: " + match.blockEvent.getPos()));
+        LootedChest chestOpened = new LootedChest(shard, match.blockEvent.getPos(), match.container);
+        openedChest = chestOpened;
+        onChestLooted(chestOpened, LootMethod.OPENED);
     }
 
     public static void onContainerScreenClosed(Inventory contents) {
         if (openedChest == null || !(contents instanceof SimpleInventory)) {
             return;
         }
-        chestHistory.computeIfAbsent(ShardTracker.getCurrentShard(), s -> new HashMap<>())
-                    .put(openedChest.blockEvent.getPos(), (SimpleInventory) contents);
+        openedChests.put(openedChest.location, (SimpleInventory) contents);
         openedChest = null;
     }
 
