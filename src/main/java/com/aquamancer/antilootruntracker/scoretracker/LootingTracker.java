@@ -22,7 +22,9 @@ public class LootingTracker {
         MINED,
         EXPLODED
     }
+
     record ChestLoc(String shard, BlockPos pos) {}
+
     static class SingleChest {
         ChestLoc location;
         private final List<ItemStack> contents;
@@ -39,6 +41,7 @@ public class LootingTracker {
         }
 
         private boolean contentsEqual(SingleChest c2) {
+            if (c2 == null) return false;
             if (this.itemCount.size() != c2.itemCount.size()) return false;
 
             for (Map.Entry<String, Integer> counts : this.itemCount.entrySet()) {
@@ -73,6 +76,7 @@ public class LootingTracker {
     private static final Map<String, Set<DoubleChest>> doubleChests = new HashMap<>();
 
     static void onSingleChestLooted(SingleChest chest, LootMethod method) {
+//        if (!ShardInfo.inLootrunProtectedShard()) return;
         if (alreadyLooted(chest, method)) return;
         if (!resemblesGeneratedChest(chest, method)) return;
         // adjust points
@@ -80,11 +84,12 @@ public class LootingTracker {
 
     private static boolean alreadyLooted(SingleChest chest, LootMethod method) {
         SingleChest previous = singleChestHistory.get(chest.location);
-        switch (method) {
-            case OPENED:
-
-
-        }
+        return switch (method) {
+            case OPENED, MINED -> chest.contentsEqual(previous);
+            case EXPLODED ->
+                // todo deal with carrier of explosions
+                    true;
+        };
     }
 
     static void onChestBroken(ChestBreakListener.BrokenChest chest) {

@@ -1,4 +1,5 @@
 package com.aquamancer.antilootruntracker.scoretracker;
+import net.minecraft.entity.LivingEntity;
 
 public class MobKillTracker {
 //    public static void onEntityDeath(LivingEntity entity, DamageSource lastDamageSource) {
