@@ -117,12 +117,16 @@ public class LootingTracker {
     }
 
     static void onChestBroken(ChestBreakListener.BrokenChest chest) {
+<<<<<<< HEAD
         BlockPos otherHalf = getOtherHalf(chest.pos, chest.state);
         if (otherHalf != null) {
             // is double chest
             otherHalfLooted.add(new ChestLoc(chest.shard, otherHalf));
         }
         onChestLooted(new LootedChest(chest.shard, chest.pos, new ArrayList<>(chest.actualContents)), LootMethod.MINED);
+=======
+        DoubleChest doubleChest = isDoubleChest(chest.pos, )
+>>>>>>> 2ec2d8b (wip scoretracking)
     }
 
     static void onChestOpened(ChestOpenListener.Match match, String shard) {
